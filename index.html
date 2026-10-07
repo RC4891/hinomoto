@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chronicles of Hinomoto – Tactical Prologue</title>
+  <meta name="description" content="A dark fantasy, choice-driven tactical RPG prologue. Hunt the false goddess and reclaim the realm." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ---------- PAGE-SPECIFIC: LANDING HERO ---------- */
+    .hero {
+      text-align: center;
+      padding: 1rem 0.5rem 0;
+    }
+
+    .hero h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      border: none;
+      margin-bottom: 1rem;
+      padding: 0;
+    }
+
+    .hero p {
+      max-width: 640px;
+      margin: 0 auto 1.5rem;
+      color: var(--bone);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .hero p.muted {
+      color: var(--ash);
+      font-size: 0.9rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 1.25rem;
+    }
+
+    .cta-row .btn {
+      margin: 0;
+      padding: 0.85rem 1.75rem;
+      font-size: 0.9rem;
+    }
+
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .link-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-decoration: none;
+      color: var(--bone);
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .link-card:hover,
+    .link-card:focus {
+      border-color: var(--ember);
+      box-shadow: 0 0 22px rgba(193, 68, 14, 0.25);
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    .link-card .card-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 0.75rem;
+      filter: drop-shadow(0 0 8px rgba(193, 68, 14, 0.5));
+    }
+
+    .link-card h3 {
+      font-family: var(--font-display);
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      margin: 0 0 0.4rem;
+    }
+
+    .link-card p {
+      font-size: 0.85rem;
+      color: var(--ash);
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    .link-card.inverse:hover,
+    .link-card.inverse:focus {
+      border-color: var(--inverse);
+      box-shadow: 0 0 22px rgba(165, 107, 255, 0.3);
+    }
+
+    .link-card.inverse .card-icon {
+      filter: drop-shadow(0 0 8px rgba(165, 107, 255, 0.6));
+    }
+
+    .link-card.inverse h3 {
+      color: var(--inverse-glow);
+    }
+
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .pillar {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-left: 3px solid var(--ember);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .pillar.inverse { border-left-color: var(--inverse); }
+    .pillar.gold    { border-left-color: var(--gold); }
+
+    .pillar h4 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--bone);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    .pillar p {
+      font-size: 0.85rem;
+      color: var(--ash);
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 600px) {
+      .cta-row .btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Chronicles of Hinomoto</h1>
+    <p class="tagline">A Tactical Prologue &mdash; The Inverse Awakens</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section class="hero" aria-labelledby="hero-heading">
+      <h2 id="hero-heading">The Night the Estate Burned</h2>
+      <p>
+        You awaken to the smell of smoke and the sound of screams. Your clan estate is under
+        violent attack. When an enemy vanguard breaks through into your bedchamber, you must
+        choose: <span class="ember-text">flee into the night</span> or
+        <span class="ember-text">stand and fight</span>.
+      </p>
+      <p class="muted">
+        The Radiant Mother is not a goddess. She is a celestial parasite &mdash; and she has
+        just cursed you with <span class="inverse-text">The Inverse</span>. You are the first
+        soul she could not eat. You will be the last.
+      </p>
+
+      <div class="cta-row">
+        <a class="btn" href="create.html">Create Your Commander</a>
+        <a class="btn inverse" href="prologue.html">Play the Prologue</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="pillars-heading">
+      <h2 id="pillars-heading">What You Are About to Play</h2>
+      <p class="muted">
+        A dark fantasy tactical RPG prologue &mdash; built around a single question: what happens
+        when a goddess rejects you, and something older catches you on the way down?
+      </p>
+      <div class="pillar-grid">
+        <div class="pillar">
+          <h4>You Are Not The Chosen One</h4>
+          <p>
+            You are the soul too frail to harvest. The goddess looked at you and found you
+            unworthy. That rejection is your only weapon.
+          </p>
+        </div>
+        <div class="pillar inverse">
+          <h4>The Inverse</h4>
+          <p>
+            Your stats are negative. Your soul is a void. Every champion who falls to you
+            becomes a meal she cannot claim.
+          </p>
+        </div>
+        <div class="pillar gold">
+          <h4>Five Chapters, One Road</h4>
+          <p>
+            From the ashes of your clan to the shrine of the Radiant Mother at Owari. Every
+            chapter brings you closer. Every choice feeds something.
+          </p>
+        </div>
+        <div class="pillar inverse">
+          <h4>A Voice In The Dark</h4>
+          <p>
+            The goddess the world forgot is watching through your eyes. She was here before
+            the Radiant Mother. She will be here after.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="explore-heading">
+      <h2 id="explore-heading">Explore the Realm</h2>
+      <div class="link-grid">
+
+        <a class="link-card" href="lore.html">
+          <svg class="card-icon" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#c9a961" stroke-width="2"/>
+            <circle cx="50" cy="50" r="10" fill="none" stroke="#c9a961" stroke-width="2"/>
+            <circle cx="50" cy="50" r="4" fill="#c9a961"/>
+          </svg>
+          <h3>Lore Archive</h3>
+          <p>The Radiant Mother revealed. The Blade. The Hollow Princess. The truth of the four domains.</p>
+        </a>
+
+        <a class="link-card inverse" href="prologue.html">
+          <svg class="card-icon" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#a56bff" stroke-width="2"/>
+            <path d="M50 20 L50 80 M30 50 L70 50" stroke="#a56bff" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <h3>Interactive Prologue</h3>
+          <p>Play the night the estate burned. Flee, hide, or stand. Feel the Inverse awaken.</p>
+        </a>
+
+        <a class="link-card" href="create.html">
+          <svg class="card-icon" viewBox="0 0 100 100" aria-hidden="true">
+            <rect x="26" y="20" width="48" height="60" rx="3" fill="none" stroke="#ff6b2c" stroke-width="2"/>
+            <path d="M38 38 H62 M38 50 H62 M38 62 H54" stroke="#ff6b2c" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>Character Creation</h3>
+          <p>Name your commander, choose a background, and forge your War Room dossier.</p>
+        </a>
+
+        <a class="link-card" href="achievements.html">
+          <svg class="card-icon" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" fill="none" stroke="#c9a961" stroke-width="2"/>
+            <path d="M50 22 L58 42 L80 42 L62 56 L70 78 L50 64 L30 78 L38 56 L20 42 L42 42 Z"
+                  fill="none" stroke="#c9a961" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <h3>Achievements</h3>
+          <p>Every path leaves a mark. Track your endings, souls, and deeds across playthroughs.</p>
+        </a>
+
+        <a class="link-card" href="feedback.html">
+          <svg class="card-icon" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M20 40 L50 20 L80 40 L80 80 L20 80 Z" fill="none" stroke="#c1440e" stroke-width="2"/>
+            <path d="M40 52 L48 60 L62 46" fill="none" stroke="#c1440e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3>Playtester Feedback</h3>
+          <p>Send word to the war room. Bug reports, pacing notes, and Inverse balance impressions.</p>
+        </a>
+
+        <a class="link-card inverse" href="chapter1.html">
+          <svg class="card-icon" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M20 70 L50 30 L80 70" fill="none" stroke="#a56bff" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M50 30 L50 80" stroke="#a56bff" stroke-width="2"/>
+          </svg>
+          <h3>Chapter I</h3>
+          <p>The Road East. The first night alone. The first champion. The first soul the Inverse drinks.</p>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="lore.html">Lore Archive</a> &middot;
+      <a href="feedback.html">Submit Feedback</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

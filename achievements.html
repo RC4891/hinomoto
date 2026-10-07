@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achievements – Chronicles of Hinomoto</title>
+  <meta name="description" content="Track your progress across every path, ending, and soul claimed." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ---------- PROGRESS BAR ---------- */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.25);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 0.75rem 0 1.25rem;
+    }
+
+    .progress-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--ember-glow));
+      width: 0%;
+      transition: width 0.8s ease;
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.6);
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--ash);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    .progress-label strong { color: var(--gold); font-weight: 700; }
+
+    /* ---------- STATS ---------- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .stat-card {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-card .label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .value {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--bone);
+      font-weight: 700;
+    }
+
+    .stat-card .value.gold { color: var(--gold); }
+    .stat-card .value.inverse { color: var(--inverse-glow); }
+
+    /* ---------- CATEGORY SECTIONS ---------- */
+    .category-section {
+      margin-top: 2rem;
+    }
+
+    .category-heading {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(201, 169, 97, 0.25);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .category-heading .category-count {
+      font-size: 0.75rem;
+      color: var(--ash);
+      letter-spacing: 0.1em;
+      font-weight: 400;
+    }
+
+    /* ---------- ACHIEVEMENT GRID ---------- */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .achievement-card {
+      display: flex;
+      gap: 0.9rem;
+      padding: 1rem;
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-radius: var(--radius);
+      align-items: flex-start;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .achievement-card.locked {
+      opacity: 0.45;
+      filter: grayscale(0.6);
+    }
+
+    .achievement-card.unlocked {
+      border-color: rgba(201, 169, 97, 0.55);
+      box-shadow: 0 0 20px rgba(201, 169, 97, 0.15);
+    }
+
+    .achievement-card.unlocked .badge {
+      background: radial-gradient(circle, var(--gold), rgba(201, 169, 97, 0.15));
+      box-shadow: 0 0 14px rgba(201, 169, 97, 0.8);
+    }
+
+    .achievement-card .badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(201, 169, 97, 0.1);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--bone);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .achievement-card.locked .badge::before {
+      content: "?";
+      font-weight: 700;
+      color: var(--ash);
+    }
+
+    .achievement-card.unlocked .badge::before {
+      content: "★";
+      color: var(--bg-void);
+      font-weight: 700;
+    }
+
+    .achievement-card .meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 0;
+    }
+
+    .achievement-card .title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      letter-spacing: 0.04em;
+      color: var(--bone);
+    }
+
+    .achievement-card.unlocked .title { color: var(--gold); }
+
+    .achievement-card .desc {
+      font-size: 0.82rem;
+      color: var(--ash);
+      line-height: 1.5;
+    }
+
+    .achievement-card .earned-at {
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--ember-glow);
+      margin-top: 0.35rem;
+    }
+
+    /* ---------- DANGER ZONE ---------- */
+    .danger-zone {
+      margin-top: 1rem;
+      padding: 1.25rem;
+      border: 1px solid rgba(122, 31, 31, 0.4);
+      background: rgba(122, 31, 31, 0.08);
+      border-radius: var(--radius);
+    }
+
+    .danger-zone h3 {
+      color: var(--blood);
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-family: var(--font-display);
+      letter-spacing: 0.05em;
+      font-size: 1rem;
+    }
+
+    .danger-zone p {
+      font-size: 0.85rem;
+      color: var(--ash);
+      margin-bottom: 0.75rem;
+    }
+
+    .btn.danger {
+      border-color: var(--blood);
+      background: linear-gradient(180deg, rgba(122, 31, 31, 0.3), rgba(122, 31, 31, 0.1));
+    }
+
+    .btn.danger:hover,
+    .btn.danger:focus {
+      box-shadow: 0 0 18px rgba(122, 31, 31, 0.6);
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Achievements</h1>
+    <p class="tagline">Deeds Remembered &mdash; Deeds Forgotten</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html" class="active">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="progress-heading">
+      <h2 id="progress-heading">Progress</h2>
+      <div class="progress-label">
+        <span>Unlocked</span>
+        <span><strong id="progress-count">0</strong> / <span id="progress-total">0</span></span>
+      </div>
+      <div class="progress-bar" role="progressbar" aria-labelledby="progress-heading">
+        <div class="fill" id="progress-fill"></div>
+      </div>
+      <p class="muted" id="progress-flavor">No deeds yet recorded. Enter the prologue to begin.</p>
+    </section>
+
+    <section aria-labelledby="stats-heading">
+      <h2 id="stats-heading">Career Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="label">Endings Seen</div>
+          <div class="value" id="stat-endings">0 / 3</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Prologue</div>
+          <div class="value" id="stat-prologue">Incomplete</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Inverse</div>
+          <div class="value inverse" id="stat-inverse">Dormant</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="achievements-heading">
+      <h2 id="achievements-heading">The Ledger of Deeds</h2>
+      <p class="muted">
+        Every path leaves a mark. Every death is remembered. Somewhere beyond the veil,
+        someone is keeping count.
+      </p>
+
+      <div id="achievements-container">
+        <!-- Rendered by JavaScript, grouped by category -->
+      </div>
+    </section>
+
+    <section aria-labelledby="danger-heading">
+      <h2 id="danger-heading">The Reckoning</h2>
+      <div class="danger-zone">
+        <h3>Erase All Records</h3>
+        <p>
+          This will permanently clear every achievement, ending, and progress save stored in
+          this browser. Your commanders will be forgotten. Your deaths will be unwitnessed.
+          <strong>This cannot be undone.</strong>
+        </p>
+        <button class="btn danger" type="button" id="reset-all">Erase the Ledger</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="prologue.html">Back to Prologue</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    /* ---------- ACHIEVEMENTS GROUPED BY CATEGORY ---------- */
+    const CATEGORIES = [
+      {
+        name: "The Prologue",
+        achievements: {
+          the_arrow:        { title: "Felled in Flight",       desc: "Die to the archer's arrow." },
+          the_beheader:     { title: "No Sign of Escape",      desc: "Be caught hiding under the bed." },
+          the_warrior:      { title: "The Last of the Clan",   desc: "Die standing with your blade drawn." },
+          the_coward:       { title: "The Coward's Path",      desc: "Slip out the window and die alone." },
+          the_patient:      { title: "The Patient",            desc: "Wait in hiding until they find you." },
+          inverse_awakened: { title: "The Inverse Awakens",    desc: "Complete the prologue." }
+        }
+      },
+      {
+        name: "The Road to Owari",
+        achievements: {
+          chapter1_begin:    { title: "The Road East",         desc: "Begin Chapter I." },
+          chapter1_mercy:    { title: "The Bread He Gave",     desc: "Spare the shrine keeper." },
+          chapter1_kill:     { title: "The Shrine Keeper",     desc: "Take his soul." },
+          chapter1_champion: { title: "The First Champion",    desc: "Defeat him on the road." },
+          chapter1_complete: { title: "The Road Continues",    desc: "Complete Chapter I." },
+          chapter2_begin:    { title: "The Shrine of Ash",     desc: "Find the forgotten altar." },
+          chapter2_memory:   { title: "Ten Thousand Years Ago", desc: "Witness Utsuhime's memory." },
+          chapter2_complete: { title: "The Prayer Cord",       desc: "Complete Chapter II." },
+          chapter3_begin:    { title: "The Village of Salt",   desc: "Reach the coastal village." },
+          chapter3_reveal:   { title: "The Blessing Burns",    desc: "Let the priest see what you are." },
+          chapter3_conceal:  { title: "The Quiet Guest",       desc: "Hide your nature from the priest." },
+          chapter3_champion: { title: "The Second Champion",   desc: "Face her on the shore." },
+          chapter3_complete: { title: "Salt on the Wind",      desc: "Complete Chapter III." },
+          chapter4_begin:    { title: "Three Years",           desc: "Begin Chapter IV." },
+          chapter4_hunter:   { title: "The Hunter",            desc: "Complete Year One." },
+          chapter4_learner:  { title: "The Learned",           desc: "Read the scroll." },
+          chapter4_changed:  { title: "Something New",         desc: "Complete Year Three." },
+          chapter4_complete: { title: "The Night Before Owari", desc: "Complete Chapter IV." }
+        }
+      },
+      {
+        name: "The Shrine of Light",
+        achievements: {
+          chapter5_begin:         { title: "The Shrine of Light",   desc: "Reach Owari." },
+          chapter5_confrontation: { title: "Face to Face",          desc: "Stand before the Radiant Mother." },
+          chapter5_choice:        { title: "The Last Question",     desc: "Make your final choice." },
+          ending_dog:             { title: "The Dog",               desc: "Serve the Radiant Mother." },
+          ending_consort:         { title: "The Consort",           desc: "Become Utsuhime's consort." },
+          ending_godslayer:       { title: "The Godslayer",         desc: "Kill them both. End the machine." }
+        }
+      },
+      {
+        name: "Completion",
+        achievements: {
+          all_endings:       { title: "Every Death, Every Door", desc: "See all four prologue deaths." },
+          all_three_endings: { title: "Master of Three Skies",   desc: "Witness all three final endings." }
+        }
+      }
+    ];
+
+    /* ---------- FLATTEN FOR COUNTING ---------- */
+    const ALL_ACHIEVEMENTS = {};
+    CATEGORIES.forEach(cat => {
+      Object.assign(ALL_ACHIEVEMENTS, cat.achievements);
+    });
+    const TOTAL = Object.keys(ALL_ACHIEVEMENTS).length;
+
+    /* ---------- LOAD STATE ---------- */
+    function loadJSON(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    const earned   = loadJSON("hinomoto.achievements", {});
+    const seen     = loadJSON("hinomoto.endingsSeen", []);
+    const progress = loadJSON("hinomoto.progress", {});
+
+    /* ---------- RENDER CATEGORIES ---------- */
+    const container = $("#achievements-container");
+    let unlockedCount = 0;
+
+    CATEGORIES.forEach(category => {
+      const ids = Object.keys(category.achievements);
+      const catUnlocked = ids.filter(id => !!earned[id]).length;
+
+      if (earned) {
+        unlockedCount += catUnlocked;
+      }
+
+      const section = document.createElement("div");
+      section.className = "category-section";
+
+      const heading = document.createElement("div");
+      heading.className = "category-heading";
+      heading.innerHTML = `
+        <span>${category.name}</span>
+        <span class="category-count">${catUnlocked} / ${ids.length}</span>
+      `;
+      section.appendChild(heading);
+
+      const grid = document.createElement("div");
+      grid.className = "achievements-grid";
+
+      ids.forEach(id => {
+        const data = category.achievements[id];
+        const isUnlocked = !!earned[id];
+
+        const card = document.createElement("div");
+        card.className = `achievement-card ${isUnlocked ? "unlocked" : "locked"}`;
+
+        let earnedLine = "";
+        if (isUnlocked && earned[id]) {
+          const date = new Date(earned[id]);
+          earnedLine = `<span class="earned-at">Unlocked ${date.toLocaleDateString()}</span>`;
+        }
+
+        card.innerHTML = `
+          <div class="badge" aria-hidden="true"></div>
+          <div class="meta">
+            <span class="title">${isUnlocked ? data.title : "Locked"}</span>
+            <span class="desc">${data.desc}</span>
+            ${earnedLine}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      section.appendChild(grid);
+      container.appendChild(section);
+    });
+
+    /* ---------- PROGRESS BAR ---------- */
+    const percent = Math.round((unlockedCount / TOTAL) * 100);
+    $("#progress-count").textContent = unlockedCount;
+    $("#progress-total").textContent = TOTAL;
+    $("#progress-fill").style.width = percent + "%";
+
+    const flavor = $("#progress-flavor");
+    if (unlockedCount === 0) {
+      flavor.textContent = "No deeds yet recorded. Enter the prologue to begin.";
+    } else if (unlockedCount === TOTAL) {
+      flavor.textContent = "Every deed is remembered. The ledger is full.";
+    } else if (unlockedCount >= TOTAL * 0.75) {
+      flavor.textContent = "The realm will remember your name.";
+    } else if (unlockedCount >= TOTAL * 0.5) {
+      flavor.textContent = "You have walked more roads than most.";
+    } else {
+      flavor.textContent = "The hunt has only just begun.";
+    }
+
+    /* ---------- STATS ---------- */
+    // Count only final endings (dog, consort, godslayer)
+    const finalEndings = seen.filter(e => ["dog", "consort", "godslayer"].includes(e));
+    $("#stat-endings").textContent = `${finalEndings.length} / 3`;
+    $("#stat-prologue").textContent = progress.prologueComplete ? "Complete" : "Incomplete";
+    $("#stat-inverse").textContent = progress.inverseActive ? "Active" : "Dormant";
+
+    /* ---------- RESET ---------- */
+    $("#reset-all").addEventListener("click", () => {
+      const confirmed = confirm(
+        "Erase all achievements, endings, and progress permanently?\n\nThis cannot be undone."
+      );
+      if (!confirmed) return;
+
+      try {
+        localStorage.removeItem("hinomoto.achievements");
+        localStorage.removeItem("hinomoto.endingsSeen");
+        localStorage.removeItem("hinomoto.progress");
+      } catch (e) {}
+
+      location.reload();
+    });
+
+    /* ---------- DROPDOWN TOGGLE ---------- */
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Character Creation – Chronicles of Hinomoto</title>
+  <meta name="description" content="Forge your commander. Choose a background, select a starting item, and view your War Room dossier." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ---------- PAGE-SPECIFIC: DOSSIER REVEAL STATE ---------- */
+    #dossier.revealed {
+      border-color: rgba(193, 68, 14, 0.45);
+      box-shadow: 0 0 30px rgba(193, 68, 14, 0.15), var(--shadow);
+      transition: border-color 0.6s, box-shadow 0.6s;
+    }
+
+    #dossier .empty-note {
+      font-size: 0.9rem;
+      color: var(--ash);
+      font-style: italic;
+      margin-top: 0.75rem;
+    }
+
+    #dossier.revealed .empty-note {
+      display: none;
+    }
+
+    /* ---------- PAGE-SPECIFIC: RETIRE ZONE ---------- */
+    .retire-zone {
+      margin-top: 2rem;
+      padding: 1.25rem;
+      border: 1px solid rgba(122, 31, 31, 0.4);
+      background: rgba(122, 31, 31, 0.08);
+      border-radius: var(--radius);
+    }
+
+    .retire-zone h3 {
+      font-family: var(--font-display);
+      color: var(--blood);
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+    }
+
+    .retire-zone p {
+      font-size: 0.85rem;
+      color: var(--ash);
+      margin-bottom: 0.75rem;
+    }
+
+    .btn.danger {
+      border-color: var(--blood);
+      background: linear-gradient(180deg, rgba(122, 31, 31, 0.3), rgba(122, 31, 31, 0.1));
+    }
+
+    .btn.danger:hover,
+    .btn.danger:focus {
+      box-shadow: 0 0 18px rgba(122, 31, 31, 0.6);
+    }
+
+    /* ---------- PAGE-SPECIFIC: SAVED COMMANDER BANNER ---------- */
+    #saved-banner {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      background: rgba(165, 107, 255, 0.08);
+      border: 1px solid rgba(165, 107, 255, 0.35);
+      border-left: 3px solid var(--inverse);
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      color: var(--bone);
+    }
+
+    #saved-banner.visible { display: block; }
+
+    #saved-banner strong {
+      color: var(--inverse-glow);
+      font-family: var(--font-display);
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Character Creation</h1>
+    <p class="tagline">Forge Your Commander &mdash; The War Room Awaits</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html" class="active">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="create-intro">
+      <h2 id="create-intro">Forge Your Commander</h2>
+      <p>
+        Before the prologue begins, the war room needs a name and a record. Choose your
+        background wisely &mdash; it will shape your starting stats and the tools you carry
+        into the night the estate burns.
+      </p>
+      <p class="muted">
+        Your soul will be judged by the <span class="gold-text">Radiant Mother</span> regardless.
+        The only question is how much of you she'll find to weigh.
+      </p>
+      <div id="saved-banner">
+        A commander is on record: <strong id="saved-name"></strong>. Their dossier is saved
+        in this browser. You can forge a new one below, or retire them at the bottom of the page.
+      </div>
+    </section>
+
+    <section id="creation" aria-labelledby="creation-heading">
+      <h2 id="creation-heading">The Commander's Record</h2>
+      <p class="muted">Enter the commander's name and choose a starting background.</p>
+
+      <form id="creation-form" class="form-grid" autocomplete="off" onsubmit="return false;">
+        <div class="field">
+          <label for="commander-name">Commander Name</label>
+          <input
+            type="text"
+            id="commander-name"
+            name="commander-name"
+            placeholder="e.g. Akira no Hinomoto"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="background">Starting Background</label>
+          <select id="background" name="background">
+            <option value="ronin">Ronin &mdash; Masterless, +Might</option>
+            <option value="shrine">Shrine Ward &mdash; +Soul Resistance</option>
+            <option value="merchant">Merchant Heir &mdash; +Gold</option>
+            <option value="shinobi">Shadow Initiate &mdash; +Evasion</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="starting-item">Starting Item</label>
+          <select id="starting-item" name="starting-item">
+            <option value="katana">Weathered Katana</option>
+            <option value="talisman">Cracked Talisman</option>
+            <option value="coin">Foreign Coin</option>
+            <option value="scroll">Ash-Stained Scroll</option>
+          </select>
+        </div>
+      </form>
+
+      <button class="btn" type="button" id="forge-btn">Forge Dossier</button>
+    </section>
+
+    <section id="dossier" aria-labelledby="dossier-heading">
+      <h2 id="dossier-heading">War Room Dossier</h2>
+      <table class="dossier-table">
+        <caption id="dossier-caption">Unassigned &mdash; forge a dossier above</caption>
+        <thead>
+          <tr>
+            <th scope="col">Attribute</th>
+            <th scope="col">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Gold</th><td class="value" id="stat-gold">0</td></tr>
+          <tr><th scope="row">Might</th><td class="value" id="stat-might">0</td></tr>
+          <tr><th scope="row">Soul State</th><td class="inverse" id="stat-soul">Dormant</td></tr>
+          <tr><th scope="row">Starting Item</th><td class="value" id="stat-item">&mdash;</td></tr>
+          <tr><th scope="row">Inverse Modifier</th><td class="inverse" id="stat-inverse">0</td></tr>
+        </tbody>
+      </table>
+      <p class="empty-note">
+        Once forged, your dossier will be sealed and carried with you into the prologue.
+      </p>
+    </section>
+
+    <section aria-labelledby="next-heading">
+      <h2 id="next-heading">The Night Awaits</h2>
+      <p>
+        When you are ready, take your commander into the fire. The prologue begins the moment
+        the vanguard breaks through the door.
+      </p>
+      <a class="btn inverse" href="prologue.html" id="go-to-prologue">Enter the Prologue</a>
+
+      <div class="retire-zone">
+        <h3>Retire This Commander</h3>
+        <p>
+          Removes the currently saved commander from this browser. Achievements and endings
+          are not affected.
+        </p>
+        <button class="btn danger" type="button" id="retire-commander">Retire Commander</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="lore.html">Lore Archive</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const BACKGROUNDS = {
+      ronin:    { gold: 20, might: 12, soul: "Frayed",   inverse: -1 },
+      shrine:   { gold: 15, might: 8,  soul: "Warded",   inverse: -2 },
+      merchant: { gold: 50, might: 6,  soul: "Dormant",  inverse: -1 },
+      shinobi:  { gold: 25, might: 10, soul: "Shadowed", inverse: -3 }
+    };
+
+    const ITEMS = {
+      katana:   "Weathered Katana",
+      talisman: "Cracked Talisman",
+      coin:     "Foreign Coin",
+      scroll:   "Ash-Stained Scroll"
+    };
+
+    function loadSavedCommander() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("hinomoto.commander") || "null");
+        if (!saved || !saved.name) return;
+
+        $("#commander-name").value = saved.name;
+        $("#background").value = saved.background || "ronin";
+        $("#starting-item").value = saved.item || "katana";
+
+        applyDossier({
+          name: saved.name,
+          background: saved.background,
+          item: saved.item
+        });
+
+        $("#saved-name").textContent = saved.name;
+        $("#saved-banner").classList.add("visible");
+      } catch (e) {}
+    }
+
+    function applyDossier({ name, background, item }) {
+      const bg = BACKGROUNDS[background] || BACKGROUNDS.ronin;
+
+      $("#dossier-caption").textContent = `Dossier of ${name}`;
+      $("#stat-gold").textContent       = bg.gold;
+      $("#stat-might").textContent      = bg.might;
+      $("#stat-soul").textContent       = bg.soul;
+      $("#stat-item").textContent       = ITEMS[item] || "—";
+      $("#stat-inverse").textContent    = bg.inverse;
+
+      $("#dossier").classList.add("revealed");
+    }
+
+    function clearDossier() {
+      $("#dossier-caption").textContent = "Unassigned — forge a dossier above";
+      $("#stat-gold").textContent       = "0";
+      $("#stat-might").textContent      = "0";
+      $("#stat-soul").textContent       = "Dormant";
+      $("#stat-item").textContent       = "—";
+      $("#stat-inverse").textContent    = "0";
+
+      $("#dossier").classList.remove("revealed");
+    }
+
+    $("#forge-btn").addEventListener("click", () => {
+      const name    = $("#commander-name").value.trim() || "Unnamed Commander";
+      const bgKey   = $("#background").value;
+      const itemKey = $("#starting-item").value;
+      const bg      = BACKGROUNDS[bgKey];
+
+      applyDossier({ name, background: bgKey, item: itemKey });
+
+      try {
+        localStorage.setItem("hinomoto.commander", JSON.stringify({
+          name,
+          background: bgKey,
+          item: itemKey,
+          gold: bg.gold,
+          might: bg.might,
+          soul: bg.soul,
+          inverse: bg.inverse,
+          created: new Date().toISOString()
+        }));
+      } catch (e) {}
+
+      $("#saved-name").textContent = name;
+      $("#saved-banner").classList.add("visible");
+
+      $("#dossier").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    $("#retire-commander").addEventListener("click", () => {
+      const confirmed = confirm(
+        "Retire this commander?\n\n" +
+        "This removes your saved character from this browser. " +
+        "Achievements and endings are not affected. This cannot be undone."
+      );
+      if (!confirmed) return;
+
+      try {
+        localStorage.removeItem("hinomoto.commander");
+      } catch (e) {}
+
+      $("#commander-name").value = "";
+      $("#background").value = "ronin";
+      $("#starting-item").value = "katana";
+
+      clearDossier();
+      $("#saved-banner").classList.remove("visible");
+
+      $("#creation").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    loadSavedCommander();
+  </script>
+</body>
+</html>

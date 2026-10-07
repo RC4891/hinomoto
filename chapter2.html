@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter II – The Shrine of Ash | Chronicles of Hinomoto</title>
+  <meta name="description" content="Chapter II: The Shrine of Ash. An abandoned altar to Utsuhime. A memory of the sky before the Radiant Mother." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    #chapter-viewport {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.4);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.6s, box-shadow 0.6s, opacity 0.4s;
+    }
+
+    #chapter-viewport.road {
+      border-color: rgba(165, 107, 255, 0.55);
+      box-shadow: 0 0 30px rgba(165, 107, 255, 0.2) inset, 0 0 20px rgba(165, 107, 255, 0.12);
+    }
+
+    #chapter-viewport.shrine {
+      border-color: rgba(201, 169, 97, 0.5);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.2) inset;
+    }
+
+    #chapter-viewport.memory {
+      border-color: rgba(165, 107, 255, 0.85);
+      box-shadow: 0 0 50px rgba(165, 107, 255, 0.4) inset, 0 0 30px rgba(165, 107, 255, 0.3);
+    }
+
+    #chapter-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--bone);
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .choices .btn { margin-top: 0; }
+
+    .chapter-log {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.2);
+      font-size: 0.85rem;
+      color: var(--ash);
+    }
+
+    .chapter-log strong { color: var(--gold); }
+
+    /* ---------- ACHIEVEMENT TOAST ---------- */
+    .achievement-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 200;
+      background: linear-gradient(180deg, #1a1312, #0a0708);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.4);
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 340px;
+      transform: translateY(180%);
+      transition: transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .achievement-toast.visible { transform: translateY(0); }
+
+    .achievement-toast .badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold), rgba(201, 169, 97, 0.15));
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.7);
+    }
+
+    .achievement-toast .meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .achievement-toast .label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .achievement-toast .title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--bone);
+    }
+
+    .achievement-toast .desc {
+      font-size: 0.75rem;
+      color: var(--ash);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .choices .btn { width: 100%; }
+      .achievement-toast { left: 0.75rem; right: 0.75rem; bottom: 0.75rem; max-width: none; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Chapter II</h1>
+    <p class="tagline">The Shrine of Ash</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" class="current" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="chapter-intro">
+      <h2 id="chapter-intro">The Shrine of Ash</h2>
+      <p class="muted" id="commander-line" style="display:none;">
+        Commander on record: <strong id="commander-name-display"></strong>.
+      </p>
+      <p class="muted">
+        An abandoned shrine to a goddess the world forgot. A memory of the sky before the
+        Radiant Mother. A prayer cord that makes the Inverse hum a little softer.
+      </p>
+    </section>
+
+    <section id="chapter" aria-labelledby="chapter-heading">
+      <h2 id="chapter-heading">The Forgotten Altar</h2>
+      <div id="chapter-viewport" role="region" aria-live="polite">
+        <div id="chapter-text">Loading&hellip;</div>
+        <div class="choices" id="chapter-choices"></div>
+        <div class="chapter-log" id="chapter-log" hidden></div>
+      </div>
+      <button class="btn" type="button" id="reset-chapter">Restart Chapter</button>
+    </section>
+
+  </main>
+
+  <div class="achievement-toast" id="achievement-toast" role="status" aria-live="polite">
+    <span class="badge" aria-hidden="true"></span>
+    <div class="meta">
+      <span class="label">Achievement Unlocked</span>
+      <span class="title" id="ach-title"></span>
+      <span class="desc" id="ach-desc"></span>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="chapter1.html">Back to Chapter I</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    let commanderName = "Unnamed Commander";
+
+    try {
+      const commander = JSON.parse(localStorage.getItem("hinomoto.commander") || "null");
+      if (commander && commander.name) {
+        commanderName = commander.name;
+        $("#commander-line").style.display = "";
+        $("#commander-name-display").textContent = commanderName;
+      }
+    } catch (e) {}
+
+    const ACHIEVEMENTS = {
+      chapter2_begin:   { title: "The Shrine of Ash",        desc: "Find the forgotten altar." },
+      chapter2_memory:  { title: "Ten Thousand Years Ago",   desc: "Witness Utsuhime's memory." },
+      chapter2_complete:{ title: "The Prayer Cord",          desc: "Complete Chapter II." }
+    };
+
+    function unlockAchievement(id) {
+      try {
+        const earned = JSON.parse(localStorage.getItem("hinomoto.achievements") || "{}");
+        if (earned[id]) return;
+        earned[id] = new Date().toISOString();
+        localStorage.setItem("hinomoto.achievements", JSON.stringify(earned));
+
+        const a = ACHIEVEMENTS[id];
+        if (a) {
+          const toast = $("#achievement-toast");
+          $("#ach-title").textContent = a.title;
+          $("#ach-desc").textContent = a.desc;
+          toast.classList.add("visible");
+          clearTimeout(window.__achTimer);
+          window.__achTimer = setTimeout(() => toast.classList.remove("visible"), 3500);
+        }
+      } catch (e) {}
+    }
+
+    function getUtsuhimeTier() {
+      const progress = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+      const chapter = progress.chapter || 0;
+      return Math.min(5, Math.max(3, chapter + 1));
+    }
+
+    const viewport   = $("#chapter-viewport");
+    const chapterText = $("#chapter-text");
+    const chapterChoices = $("#chapter-choices");
+    const chapterLog = $("#chapter-log");
+
+    function setText(html) { chapterText.innerHTML = html; }
+
+    function setState(state) {
+      viewport.classList.remove("road", "shrine", "memory");
+      if (state) viewport.classList.add(state);
+    }
+
+    function whisper(line) {
+      const tier = getUtsuhimeTier();
+      chapterText.innerHTML +=
+        `<span class="whisper-line whisper-tier-${tier}">( ${line} )</span>`;
+    }
+
+    function showChoices(buttons) {
+      chapterChoices.innerHTML = buttons
+        .map(b => `<button class="btn ${b.className || ''}" data-choice="${b.id}" type="button">${b.label}</button>`)
+        .join("");
+      bindChoices();
+    }
+
+    function clearChoices() { chapterChoices.innerHTML = ""; }
+
+    function bindChoices() {
+      $$("#chapter-choices .btn").forEach(btn => {
+        btn.addEventListener("click", () => handleChoice(btn.dataset.choice));
+      });
+    }
+
+    function log(html) {
+      chapterLog.hidden = false;
+      chapterLog.innerHTML = html;
+    }
+
+    function clearLog() {
+      chapterLog.hidden = true;
+      chapterLog.innerHTML = "";
+    }
+
+    function saveProgress(patch) {
+      try {
+        const existing = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+        localStorage.setItem("hinomoto.progress", JSON.stringify({
+          ...existing,
+          chapter: 2,
+          ...patch
+        }));
+      } catch (e) {}
+    }
+
+    function restartChapter() {
+      setState("road");
+      clearLog();
+      unlockAchievement("chapter2_begin");
+      saveProgress({ chapter2Started: true });
+
+      setText(
+        `Three more days east. The pines thin out. The air grows saltier. You are getting ` +
+        `closer to the coast &mdash; closer to Owari, closer to her. ` +
+        `<br><br>` +
+        `You have not slept well. Every time you close your eyes, you see the shrine keeper's ` +
+        `face, or the champion's dulled blade, or the black ash of their souls curling into ` +
+        `your chest. ` +
+        `<br><br>` +
+        `And every time you wake, the Inverse is a little louder. A little fuller. ` +
+        `A little less like a stranger.`
+      );
+
+      whisper("i remember this part of the road. the trees were smaller then. i was smaller too. we all were.");
+
+      showChoices([
+        { id: "to_shrine", label: "Continue Along the Road", className: "inverse" }
+      ]);
+      log(`<strong>Chapter II begins.</strong> Three days east. The coast is close.`);
+    }
+
+    function sceneShrine() {
+      setState("shrine");
+      setText(
+        `You find it by accident, an hour before dusk. ` +
+        `<br><br>` +
+        `A shrine. Not one of hers. Not one of the Radiant Mother's. ` +
+        `<br><br>` +
+        `This shrine is <em>old</em>. Older than the road, older than the pines, older than ` +
+        `any map you have ever seen. The stone is cracked and moss-covered. The roof has ` +
+        `collapsed on one side. There are no golden halos here, no single eyes, no incense ` +
+        `burning at an altar. ` +
+        `<br><br>` +
+        `Just an empty doorway, and beyond it, a stone table where offerings were once laid. ` +
+        `And above the doorway, carved in a script you do not recognize, a symbol. ` +
+        `<br><br>` +
+        `A crescent. Waning. Alone in the dark.`
+      );
+
+      whisper("i remember this place. i remember the children who lit incense here. they are gone now.");
+
+      showChoices([
+        { id: "enter", label: "Enter the Shrine", className: "inverse" }
+      ]);
+      log(`<strong>The forgotten shrine.</strong> Older than the faith.`);
+    }
+
+    function sceneEnter() {
+      setState("shrine");
+      setText(
+        `You step inside. The air is cool and still. Moss on the stones. Dust on the altar. ` +
+        `Something has not been disturbed here in a very long time. ` +
+        `<br><br>` +
+        `The Inverse begins to <em>hum</em>. Not the cold pulse you have grown used to. ` +
+        `Something deeper. Something older. It resonates with the shrine itself, as if the ` +
+        `two of them have been waiting for each other. ` +
+        `<br><br>` +
+        `You place your hand on the altar. ` +
+        `<br><br>` +
+        `And the world <em>bends</em>.`
+      );
+
+      whisper("you will see what i saw. do not be afraid. it is only a memory. it cannot hurt you.");
+
+      showChoices([
+        { id: "memory", label: "Let the Memory Take You", className: "inverse" }
+      ]);
+      log(`<strong>The altar.</strong> Something is happening.`);
+    }
+
+    function sceneMemory() {
+      setState("memory");
+      unlockAchievement("chapter2_memory");
+
+      setText(
+        `You are not in the shrine anymore. You are not in your body anymore. ` +
+        `<br><br>` +
+        `You are standing on a hill under a sky you have never seen. It is night. The stars ` +
+        `are arranged differently &mdash; constellations you do not recognize, patterns that ` +
+        `the world has forgotten. There are <em>two moons</em>. One large, one small, both ` +
+        `silver-pale. ` +
+        `<br><br>` +
+        `Below you, a village sleeps. Wooden houses with thatched roofs. Rice fields. A ` +
+        `stream catching the light of the two moons. It is a quiet place. It is a happy ` +
+        `place. ` +
+        `<br><br>` +
+        `And above it all &mdash; above the village, above the fields, above the two moons ` +
+        `&mdash; there is a figure in the sky. ` +
+        `<br><br>` +
+        `A woman. Not the Radiant Mother. Not the golden halo. ` +
+        `<br><br>` +
+        `A woman with long dark hair, drifting in a cosmic wind, silhouetted in violet ` +
+        `light. Her eyes are closed. Her hands are open. She is not watching the village. ` +
+        `She is simply <em>present</em> with it &mdash; the way a mother is present with a ` +
+        `sleeping child, the way a sky is present with the land. ` +
+        `<br><br>` +
+        `She is not feeding on anyone. She is not harvesting anyone. She is just <em>there</em>. ` +
+        `And the village below does not know she exists, and does not need to. ` +
+        `<br><br>` +
+        `This is Utsuhime. This is what she was.`
+      );
+
+      whisper("this was my world. i did not need much. i only needed time.");
+
+      showChoices([
+        { id: "memory_2", label: "Watch Longer", className: "inverse" }
+      ]);
+      log(`<strong>The memory.</strong> A world before the Radiant Mother.`);
+    }
+
+    function sceneMemory2() {
+      setState("memory");
+      setText(
+        `You watch for a long time. Nothing happens. That is the point. ` +
+        `<br><br>` +
+        `The village sleeps. The two moons drift. The woman in the sky opens her eyes for ` +
+        `just a moment and looks down at the world below her &mdash; not hungrily, not ` +
+        `possessively. Just to <em>see</em> it. To see the rice growing. To see the sleeping ` +
+        `children. To see the stream catching the moonlight. ` +
+        `<br><br>` +
+        `She closes her eyes again. ` +
+        `<br><br>` +
+        `And then, very slowly, the sky begins to change. ` +
+        `<br><br>` +
+        `Something is arriving from the east. Something <em>gold</em>. A light that does not ` +
+        `belong to any star or moon. It rises over the horizon like a sunrise that has no ` +
+        `right to be there at midnight. The woman in the sky does not see it yet. She is ` +
+        `still looking at the village. ` +
+        `<br><br>` +
+        `The light grows. The stars begin to disappear. The two moons dim. And somewhere, ` +
+        `very far away, something laughs.`
+      );
+
+      whisper("do not watch what happens next. i do not want you to see me like that. i was not brave. i was not wise. i was only small.");
+
+      showChoices([
+        { id: "wake", label: "Wake Up", className: "inverse" }
+      ]);
+      log(`<strong>The memory breaks.</strong> You have seen enough.`);
+    }
+
+    function sceneWake() {
+      setState("shrine");
+      unlockAchievement("chapter2_complete");
+      saveProgress({
+        chapter2Complete: true,
+        chapter: 2,
+        sawUtsuhimeMemory: true
+      });
+
+      setText(
+        `You are back in the shrine. Your hand is on the altar. The air is still cool and ` +
+        `still. The Inverse hums quietly in your chest, as if it too has just returned from ` +
+        `somewhere far away. ` +
+        `<br><br>` +
+        `On the altar, where there was nothing before, there is now a cord. ` +
+        `<br><br>` +
+        `It is woven from something pale and old &mdash; not silk, not cotton, something ` +
+        `between. It is warm in your hand when you pick it up. Warmer than it should be. ` +
+        `<br><br>` +
+        `The Inverse hums a little softer when you wrap it around your wrist. ` +
+        `<br><br>` +
+        `You do not know what the cord is for. You only know it was left here for you, ` +
+        `somehow, by a goddess who has not spoken to a mortal in ten thousand years.`
+      );
+
+      whisper("wear it. it does not protect you. it only reminds you that you do not need her protection. keep east. the coast is close now.");
+
+      showChoices([
+        { id: "chapter3", label: "Continue to Chapter III", className: "inverse" }
+      ]);
+      log(`<strong>Chapter II complete.</strong> You have seen her memory. You carry her cord.`);
+    }
+
+    function handleChoice(choice) {
+      switch (choice) {
+        case "to_shrine":   return sceneShrine();
+        case "enter":       return sceneEnter();
+        case "memory":      return sceneMemory();
+        case "memory_2":    return sceneMemory2();
+        case "wake":        return sceneWake();
+        case "chapter3":    window.location.href = "chapter3.html"; return;
+        default:            return;
+      }
+    }
+
+    $("#reset-chapter").addEventListener("click", restartChapter);
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    restartChapter();
+  </script>
+</body>
+</html>

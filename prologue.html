@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Prologue – Chronicles of Hinomoto</title>
+  <meta name="description" content="Play the night the estate burned. Flee, hide, or stand. Watch the Inverse awaken." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    #prologue-viewport {
+      background: var(--bg-void);
+      border: 1px solid rgba(193, 68, 14, 0.35);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.6s, box-shadow 0.6s, opacity 0.4s;
+    }
+
+    #prologue-viewport.celestial {
+      border-color: rgba(201, 169, 97, 0.6);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.25) inset, 0 0 20px rgba(201, 169, 97, 0.15);
+    }
+
+    #prologue-viewport.cursed {
+      border-color: rgba(165, 107, 255, 0.7);
+      box-shadow: 0 0 40px rgba(165, 107, 255, 0.3) inset, 0 0 24px rgba(165, 107, 255, 0.2);
+    }
+
+    #prologue-viewport.coward {
+      border-color: rgba(122, 31, 31, 0.6);
+      box-shadow: 0 0 24px rgba(122, 31, 31, 0.35) inset;
+      opacity: 0.85;
+    }
+
+    #prologue-viewport.hidden {
+      border-color: rgba(201, 169, 97, 0.35);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.7) inset;
+      opacity: 0.9;
+    }
+
+    #prologue-viewport.found {
+      border-color: rgba(122, 31, 31, 0.85);
+      box-shadow: 0 0 40px rgba(122, 31, 31, 0.5) inset, 0 0 24px rgba(122, 31, 31, 0.3);
+      opacity: 0.95;
+    }
+
+    #prologue-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--bone);
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .choices .btn { margin-top: 0; }
+
+    .prologue-log {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.2);
+      font-size: 0.85rem;
+      color: var(--ash);
+    }
+
+    .prologue-log strong { color: var(--gold); }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+
+    .modal-overlay.visible { display: flex; }
+
+    .modal-box {
+      background: linear-gradient(180deg, #1a0c0c, #0a0708);
+      border: 1px solid rgba(122, 31, 31, 0.6);
+      border-radius: var(--radius);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(122, 31, 31, 0.25);
+      max-width: 480px;
+      width: 100%;
+      padding: 2rem 1.75rem;
+      text-align: center;
+    }
+
+    .modal-box .modal-crest {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(122, 31, 31, 0.7));
+      opacity: 0.9;
+    }
+
+    .modal-box h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--blood);
+      margin-bottom: 1rem;
+    }
+
+    .modal-box p {
+      color: var(--bone);
+      margin-bottom: 0.75rem;
+      line-height: 1.7;
+    }
+
+    .modal-box p.ash-text {
+      color: var(--ash);
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    .achievement-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 200;
+      background: linear-gradient(180deg, #1a1312, #0a0708);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.4);
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 340px;
+      transform: translateY(180%);
+      transition: transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .achievement-toast.visible { transform: translateY(0); }
+
+    .achievement-toast .badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold), rgba(201, 169, 97, 0.15));
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.7);
+    }
+
+    .achievement-toast .meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .achievement-toast .label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .achievement-toast .title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--bone);
+    }
+
+    .achievement-toast .desc {
+      font-size: 0.75rem;
+      color: var(--ash);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .modal-box { padding: 1.5rem 1.25rem; }
+      .achievement-toast { left: 0.75rem; right: 0.75rem; bottom: 0.75rem; max-width: none; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>The Prologue</h1>
+    <p class="tagline">The Night the Estate Burned</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" class="current" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="prologue-intro">
+      <h2 id="prologue-intro">You Have One Breath to Decide</h2>
+      <p class="muted">
+        The vanguard is inside the walls. The estate is burning. Your clan is dying beyond
+        the door. Play the night it all began.
+      </p>
+      <p class="muted" id="commander-line" style="display:none;">
+        Commander on record: <strong id="commander-name-display"></strong>.
+      </p>
+    </section>
+
+    <section id="viewport" aria-labelledby="viewport-heading">
+      <h2 id="viewport-heading">The Night the Estate Burned</h2>
+      <div id="prologue-viewport" role="region" aria-live="polite">
+        <div id="prologue-text"></div>
+        <div class="choices" id="prologue-choices"></div>
+        <div class="prologue-log" id="prologue-log" hidden></div>
+      </div>
+      <button class="btn" type="button" id="reset-prologue">Restart Prologue</button>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="coward-modal" role="dialog" aria-modal="true" aria-labelledby="coward-title">
+    <div class="modal-box">
+      <svg class="modal-crest" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#7a1f1f" stroke-width="2"/>
+        <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+              fill="none" stroke="#7a1f1f" stroke-width="2"/>
+      </svg>
+      <h3 id="coward-title">You Fell.</h3>
+      <p id="coward-body"></p>
+      <p class="ash-text" id="coward-flavor"></p>
+      <button class="btn" type="button" id="coward-continue">Return to the Fire</button>
+    </div>
+  </div>
+
+  <div class="achievement-toast" id="achievement-toast" role="status" aria-live="polite">
+    <span class="badge" aria-hidden="true"></span>
+    <div class="meta">
+      <span class="label">Achievement Unlocked</span>
+      <span class="title" id="ach-title"></span>
+      <span class="desc" id="ach-desc"></span>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="lore.html">Lore Archive</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    /* ---------- LOAD COMMANDER ---------- */
+    let commanderName = "Unnamed Commander";
+
+    try {
+      const saved = localStorage.getItem("hinomoto.commander");
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data && data.name) {
+          commanderName = data.name;
+          $("#commander-line").style.display = "";
+          $("#commander-name-display").textContent = commanderName;
+        }
+      }
+    } catch (e) {}
+
+    /* ---------- ACHIEVEMENTS ---------- */
+    const ACHIEVEMENTS = {
+      the_arrow:        { title: "Felled in Flight",         desc: "Die to the archer's arrow." },
+      the_beheader:     { title: "No Sign of Escape",        desc: "Be caught hiding under the bed." },
+      the_warrior:      { title: "The Last of the Clan",     desc: "Die standing with your blade drawn." },
+      the_coward:       { title: "The Coward's Path",        desc: "Slip out the window and die alone." },
+      inverse_awakened: { title: "The Inverse Awakens",      desc: "Complete the prologue." },
+      the_patient:      { title: "The Patient",              desc: "Wait in hiding until they find you." },
+      all_endings:      { title: "Every Death, Every Door",  desc: "Witness all four prologue endings." }
+    };
+
+    function unlockAchievement(id) {
+      try {
+        const earned = JSON.parse(localStorage.getItem("hinomoto.achievements") || "{}");
+        if (earned[id]) return;
+
+        earned[id] = new Date().toISOString();
+        localStorage.setItem("hinomoto.achievements", JSON.stringify(earned));
+
+        const a = ACHIEVEMENTS[id];
+        if (a) {
+          const toast = $("#achievement-toast");
+          $("#ach-title").textContent = a.title;
+          $("#ach-desc").textContent = a.desc;
+          toast.classList.add("visible");
+          clearTimeout(window.__achTimer);
+          window.__achTimer = setTimeout(() => toast.classList.remove("visible"), 3500);
+        }
+      } catch (e) {}
+    }
+
+    function recordEnding(endingId) {
+      try {
+        const seen = JSON.parse(localStorage.getItem("hinomoto.endingsSeen") || "[]");
+        if (!seen.includes(endingId)) {
+          seen.push(endingId);
+          localStorage.setItem("hinomoto.endingsSeen", JSON.stringify(seen));
+        }
+        // Check for all four prologue endings
+        const prologueEndings = ["arrow", "beheader", "warrior", "coward"];
+        if (prologueEndings.every(e => seen.includes(e))) {
+          unlockAchievement("all_endings");
+        }
+      } catch (e) {}
+    }
+
+    /* ---------- ENGINE ---------- */
+    const viewport        = $("#prologue-viewport");
+    const prologueText    = $("#prologue-text");
+    const prologueChoices = $("#prologue-choices");
+    const prologueLog     = $("#prologue-log");
+    const cowardModal     = $("#coward-modal");
+
+    let sneakReward = false;
+
+    function setPrologueText(html) { prologueText.innerHTML = html; }
+
+    function setViewportState(state) {
+      viewport.classList.remove("celestial", "cursed", "coward", "hidden", "found");
+      if (state) viewport.classList.add(state);
+    }
+
+    function showChoices(buttons) {
+      prologueChoices.innerHTML = buttons
+        .map(b => `<button class="btn ${b.className || ''}" data-choice="${b.id}" type="button">${b.label}</button>`)
+        .join("");
+      bindChoices();
+    }
+
+    function clearChoices() { prologueChoices.innerHTML = ""; }
+
+    function bindChoices() {
+      $$("#prologue-choices .btn").forEach(btn => {
+        btn.addEventListener("click", () => handleChoice(btn.dataset.choice));
+      });
+    }
+
+    function log(html) {
+      prologueLog.hidden = false;
+      prologueLog.innerHTML = html;
+    }
+
+    function clearLog() {
+      prologueLog.hidden = true;
+      prologueLog.innerHTML = "";
+    }
+
+    function getUtsuhimeTier() {
+      const progress = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+      const chapter = progress.chapter || 0;
+      if (!progress.chapterComplete && chapter === 0) return 1;
+      return Math.min(5, Math.max(1, chapter + 1));
+    }
+
+    function goddessWhisper(line) {
+      const tier = getUtsuhimeTier();
+      prologueText.innerHTML +=
+        `<span class="whisper-line whisper-tier-${tier}">( ${line} )</span>`;
+    }
+
+    function showArrowModal() {
+      unlockAchievement("the_arrow");
+      recordEnding("arrow");
+      $("#coward-title").textContent = "You Fell.";
+      $("#coward-body").innerHTML =
+        `The arrow caught you mid-leap. You never reached the treeline. You tumbled down the ` +
+        `embankment and died in the dark, alone, within sight of the fire you ran from.`;
+      $("#coward-flavor").innerHTML =
+        `Your clan burned behind you. Your name will not be sung. Your soul never reached ` +
+        `the Radiant Mother's light &mdash; it was never offered. You are already forgotten.`;
+      cowardModal.classList.add("visible");
+    }
+
+    function showFoundModal() {
+      unlockAchievement("the_beheader");
+      unlockAchievement("the_patient");
+      recordEnding("beheader");
+      $("#coward-title").textContent = "You Were Found.";
+      $("#coward-body").innerHTML =
+        `They did not buy the story of an empty room. They searched. They found you beneath ` +
+        `the bed, curled in the dust, and they dragged you out by the ankle. You did not even ` +
+        `get a chance to die on your feet.`;
+      $("#coward-flavor").innerHTML =
+        `The blade came down before the Radiant Mother could call you up. You were never ` +
+        `weighed. You were never judged. You were simply <em>discarded</em>.`;
+      cowardModal.classList.add("visible");
+    }
+
+    /* ---------- SCENE 1: WAKE UP ---------- */
+    function restartPrologue() {
+      setViewportState(null);
+      clearLog();
+      sneakReward = false;
+      cowardModal.classList.remove("visible");
+      setPrologueText(
+        `Smoke coils through the rafters. Your ears ring. You are on the floor of your ` +
+        `bedchamber and you do not remember falling. The estate is burning. Beyond the door, ` +
+        `your clan is dying. ` +
+        `<br><br>` +
+        `Three things are within reach.`
+      );
+      showChoices([
+        { id: "blade",  label: "Grab Your Blade",     className: "" },
+        { id: "window", label: "Go to the Window",     className: "" },
+        { id: "bed",    label: "Hide Beneath the Bed", className: "inverse" }
+      ]);
+      log(`<strong>The estate is burning.</strong> Choose what is within reach.`);
+    }
+
+    function sceneBlade() {
+      setPrologueText(
+        `Your hand closes around the hilt of your blade. The weight of it steadies you. ` +
+        `The world narrows to the doorway. ` +
+        `<br><br>` +
+        `The door splinters. A masked soldier charges through.`
+      );
+      showChoices([
+        { id: "vanguard_blade", label: "Turn to Face Him", className: "inverse" }
+      ]);
+      log(`<strong>You are armed.</strong> The vanguard breaks through.`);
+    }
+
+    function sceneWindow() {
+      setPrologueText(
+        `You scramble to the shutters and throw them open. Cold night air rushes in, sharp ` +
+        `and clean against the smoke. Below you, the courtyard. Beyond it, the treeline. ` +
+        `Your route out. ` +
+        `<br><br>` +
+        `Behind you, the door splinters.`
+      );
+      showChoices([
+        { id: "vanguard_window", label: "Turn to Look", className: "" }
+      ]);
+      log(`<strong>The window is open.</strong> The treeline is close.`);
+    }
+
+    function sceneBed() {
+      setViewportState("hidden");
+      setPrologueText(
+        `You drop to the floor and roll beneath the bed. Dust and old straw. You press ` +
+        `yourself flat against the boards, one hand clamped over your mouth. ` +
+        `<br><br>` +
+        `Through the gap, you can see the doorway. ` +
+        `<br><br>` +
+        `The door splinters inward. Boots cross the threshold.`
+      );
+      showChoices([
+        { id: "vanguard_bed", label: "Hold Your Breath", className: "" }
+      ]);
+      log(`<strong>You are hidden.</strong> He does not know you are here.`);
+    }
+
+    function sceneVanguardBlade() {
+      setPrologueText(
+        `He sees you standing with the blade drawn. Something flickers across his eyes ` +
+        `&mdash; surprise, maybe respect, maybe just animal reflex. ` +
+        `<br><br>` +
+        `There are more boots behind him. There is no winning this fight. ` +
+        `<br><br>` +
+        `What do you do?`
+      );
+      showChoices([
+        { id: "fight", label: "Stand and Fight",     className: "inverse" },
+        { id: "flee",  label: "Flee into the Night", className: "" }
+      ]);
+      log(`<strong>He sees you armed.</strong> What do you do?`);
+    }
+
+    function sceneVanguardWindow() {
+      setPrologueText(
+        `You turn. He is already in the room, blade raised, mask angled toward the open ` +
+        `window and the cold air spilling through it. ` +
+        `<br><br>` +
+        `He takes one step toward you. He is faster than he looks. ` +
+        `<br><br>` +
+        `What do you do?`
+      );
+      showChoices([
+        { id: "leap",  label: "Leap Through the Window", className: "" },
+        { id: "fight", label: "Turn and Fight",           className: "inverse" }
+      ]);
+      log(`<strong>He sees the open window.</strong> He is coming.`);
+    }
+
+    function sceneVanguardBed() {
+      setViewportState("hidden");
+      setPrologueText(
+        `Boots cross the floor. You see the hem of a cloak, the point of a blade dragging ` +
+        `against the boards, and the slow sweep of his head as he scans the room for you. ` +
+        `<br><br>` +
+        `He has not seen you. His back is to the bed. He is within reach. ` +
+        `<br><br>` +
+        `For one breath, everything is possible.`
+      );
+      showChoices([
+        { id: "sneak", label: "Sneak Attack",         className: "inverse" },
+        { id: "hide",  label: "Stay Hidden",          className: "" },
+        { id: "slip",  label: "Slip Out the Window",  className: "" }
+      ]);
+      log(`<strong>He has not seen you.</strong> His back is to the bed.`);
+    }
+
+    function sceneSneak() {
+      setViewportState("cursed");
+      sneakReward = true;
+
+      setPrologueText(
+        `You burst out from beneath the bed. He hears you too late. Your blade &mdash; the ` +
+        `one you keep beneath the mattress, the one you never thought you would need &mdash; ` +
+        `drives up beneath his ribs and into his heart. ` +
+        `<br><br>` +
+        `He falls. He does not cry out. You are on top of him before you realize what you ` +
+        `have done, breathing hard, hands shaking. ` +
+        `<br><br>` +
+        `And then you see it. ` +
+        `<br><br>` +
+        `His soul lifts from his body in a <span class="gold-text">golden glow</span>, drifting ` +
+        `upward through the burning ceiling like smoke drawn toward a high window. ` +
+        `<br><br>` +
+        `You do not understand what you are seeing. You only know that you want more time. ` +
+        `<br><br>` +
+        `Heavy boots in the corridor. More of them.`
+      );
+      showChoices([
+        { id: "fight", label: "Stand and Fight",     className: "inverse" },
+        { id: "flee",  label: "Flee into the Night", className: "" }
+      ]);
+      log(`<strong>First blood.</strong> His soul rises in gold.`);
+    }
+
+    function sceneStayHidden() {
+      setViewportState("found");
+      setPrologueText(
+        `You do not move. He stands there for one long breath, then two. Then he speaks &mdash; ` +
+        `not to you, to someone beyond the door. You cannot hear the words. You only hear the ` +
+        `reply. ` +
+        `<br><br>` +
+        `<em>"Check under the bed."</em> ` +
+        `<br><br>` +
+        `Boots cross the floor. A blade scrapes the boards. And then the mask is looking at ` +
+        `you through the gap, upside down, and a hand closes around your ankle. ` +
+        `<br><br>` +
+        `They drag you out. You do not get to your feet. You do not get a blade in your hand. ` +
+        `You are on your knees in the doorway of your own burning house, and someone is ` +
+        `holding your hair. ` +
+        `<br><br>` +
+        `You hear the sword unsheathe behind you. ` +
+        `<br><br>` +
+        `<em>You do not hear anything after that.</em>`
+      );
+      clearChoices();
+      log(`<strong>They found no sign of escape.</strong> They searched.`);
+      setTimeout(showFoundModal, 500);
+    }
+
+    function sceneSlip() {
+      setViewportState("coward");
+      unlockAchievement("the_coward");
+      recordEnding("coward");
+      setPrologueText(
+        `You wait until his back is turned, then roll out from under the bed and bolt for ` +
+        `the window. You are halfway through the shutters when someone in the corridor ` +
+        `shouts. ` +
+        `<br><br>` +
+        `You do not look back. You drop into the courtyard, sprint for the treeline, and ` +
+        `you almost make it. ` +
+        `<br><br>` +
+        `Then you hear the bowstring. ` +
+        `<br><br>` +
+        `The arrow takes you in the back, mid-stride. Your legs stop answering. You hit the ` +
+        `embankment hard and roll, and roll, and the world spins &mdash; smoke, stars, blood, ` +
+        `stone &mdash; until you come to rest at the bottom of the ravine, alone. ` +
+        `<br><br>` +
+        `Above you, the estate burns. You cannot move. You cannot call for help. You can ` +
+        `only watch the fire shrink as your vision darkens. ` +
+        `<br><br>` +
+        `<em>You waited one breath too long.</em>`
+      );
+      clearChoices();
+      log(`<strong>Path chosen:</strong> Slip out. The arrow found you anyway.`);
+      setTimeout(showArrowModal, 500);
+    }
+
+    function sceneLeap() {
+      setViewportState("coward");
+      setPrologueText(
+        `You do not hesitate. You throw yourself through the shutters. ` +
+        `<br><br>` +
+        `The night air rushes past you. For one moment, you believe you will make it &mdash; ` +
+        `the treeline is close, the fire is behind you, and your clan is already lost. ` +
+        `<br><br>` +
+        `Then you hear the bowstring. ` +
+        `<br><br>` +
+        `The arrow takes you in the back, mid-air. Your legs stop answering before your body ` +
+        `hits the ground. You tumble down the embankment, and roll, and the world spins ` +
+        `&mdash; smoke, stars, blood, stone &mdash; until you come to rest at the bottom of the ` +
+        `ravine, alone. ` +
+        `<br><br>` +
+        `Above you, the estate burns. You cannot move. You cannot call for help. You can ` +
+        `only watch the fire shrink as your vision darkens. ` +
+        `<br><br>` +
+        `<em>No one is coming. No one knows you are here.</em>`
+      );
+      clearChoices();
+      log(`<strong>Path chosen:</strong> Leap. The arrow found you mid-air.`);
+      setTimeout(showArrowModal, 500);
+    }
+
+    function sceneFlee() {
+      setViewportState("coward");
+      setPrologueText(
+        `You hurl yourself through the shattered window. The night air rushes past you. ` +
+        `For one moment, you believe you will make it &mdash; the treeline is close, the fire ` +
+        `is behind you, and your clan is already lost. ` +
+        `<br><br>` +
+        `Then you hear the bowstring. ` +
+        `<br><br>` +
+        `The arrow takes you in the back, mid-leap. Your legs stop answering. You hit the ` +
+        `embankment hard and roll, and roll, and the world spins &mdash; smoke, stars, blood, ` +
+        `stone &mdash; until you come to rest at the bottom of the ravine, alone. ` +
+        `<br><br>` +
+        `Above you, the estate burns. You cannot move. You cannot call for help. You can ` +
+        `only watch the fire shrink as your vision darkens. ` +
+        `<br><br>` +
+        `<em>No one is coming. No one knows you are here.</em>`
+      );
+      clearChoices();
+      log(`<strong>Path chosen:</strong> Flee. The arrow found you before the treeline did.`);
+      setTimeout(showArrowModal, 500);
+    }
+
+    function sceneFight() {
+      setViewportState(null);
+
+      if (sneakReward) {
+        setPrologueText(
+          `You take down another soldier at the threshold &mdash; two now, not one. ` +
+          `His soul rises from his body in a <span class="gold-text">golden glow</span>, ` +
+          `drifting upward toward the smoke. The doorway still fills with them. ` +
+          `Your arms burn. Your vision blurs. A spear finds your side. A blade finds your back. ` +
+          `You fall &mdash; not as a coward, but as the last of your clan. ` +
+          `<em>The estate burns around you.</em>`
+        );
+        log(`<strong>Two souls risen.</strong> You stood and fought. You died with your clan.`);
+      } else {
+        setPrologueText(
+          `You cut down the first soldier. His soul lifts from his body in a ` +
+          `<span class="gold-text">golden glow</span>, drifting upward toward the smoke. ` +
+          `The doorway fills with more of them. ` +
+          `Your arms burn. Your vision blurs. A spear finds your side. A blade finds your back. ` +
+          `You fall &mdash; not as a coward, but as the last of your clan. ` +
+          `<em>The estate burns around you.</em>`
+        );
+        log(`<strong>One soul risen.</strong> You stood and fought. You died with your clan.`);
+      }
+
+      showChoices([
+        { id: "die", label: "Let the Darkness Take You", className: "" }
+      ]);
+    }
+
+    function sceneDeath() {
+      unlockAchievement("the_warrior");
+      recordEnding("warrior");
+      setViewportState("celestial");
+      setPrologueText(
+        `The smoke fades. The pain fades. You are no longer on the floor of your estate. ` +
+        `You stand in a place without ground, without sky &mdash; a vast, <span class="gold-text">golden void</span>. ` +
+        `And above you, descending like a slow sunrise, is <span class="gold-text">her</span>.`
+      );
+      showChoices([
+        { id: "behold", label: "Behold the Radiant Mother", className: "" }
+      ]);
+      log(`<strong>Death.</strong> Your soul has left the burning estate.`);
+    }
+
+    function sceneMother() {
+      setViewportState("celestial");
+      setPrologueText(
+        `She is beautiful beyond language. A halo of golden light encircles a single, ` +
+        `unblinking eye. Her voice arrives not in your ears but in your bones. ` +
+        `<br><br>` +
+        `<span class="gold-text">"Another soul, offered up by the fire,"</span> she says. ` +
+        `<span class="gold-text">"Let me see if you are worthy to be my hero."</span> ` +
+        `<br><br>` +
+        `Her light pours into you. It is warm. It is heavy. It is <em>hungry</em>. ` +
+        `She is weighing you &mdash; measuring the density of your soul, the depth of your essence, ` +
+        `the worth of your harvest.`
+      );
+      goddessWhisper("she cannot see me. she has not looked at this corner of the sky in ten thousand years. stay still. let her look past you.");
+      showChoices([
+        { id: "judged", label: "Wait for Her Judgment", className: "" }
+      ]);
+      log(`<strong>The Radiant Mother has come to weigh your soul.</strong>`);
+    }
+
+    function sceneJudgment() {
+      setViewportState("celestial");
+      setPrologueText(
+        `The golden light withdraws from you like a tide pulling back from a shore it found ` +
+        `unworthy of touching. Her eye narrows. ` +
+        `<br><br>` +
+        `<span class="gold-text">"Too thin. Too dim. Too frail."</span> ` +
+        `<br><br>` +
+        `A pause that lasts a lifetime. ` +
+        `<br><br>` +
+        `<span class="gold-text">"You are not worthy to be my hero. You are not worthy to be my food. ` +
+        `You are not worthy to be <em>anything</em>."</span>`
+      );
+      showChoices([
+        { id: "curse", label: "Endure Her Rejection", className: "inverse" }
+      ]);
+      log(`<strong>Judgment:</strong> You have been found unworthy.`);
+    }
+
+    function sceneCurse() {
+      setViewportState("cursed");
+      setPrologueText(
+        `She does not send you away. She does something worse. ` +
+        `<br><br>` +
+        `<span class="gold-text">"Then let the absence of my light define you."</span> ` +
+        `<br><br>` +
+        `Her golden halo <em>inverts</em>. The warmth drains from your soul. Everything she ` +
+        `would have given a worthy champion &mdash; leveling, divine light, celestial favor &mdash; ` +
+        `is torn out of you and replaced with its opposite. ` +
+        `<br><br>` +
+        `Your stats <span class="inverse-text">invert into negative values</span>. Your soul becomes ` +
+        `an <span class="inverse-text">entropic void</span>. Blessed metal will rot in your presence. ` +
+        `The celestial hierarchy will not be able to see you. ` +
+        `<br><br>` +
+        `You have been cursed with <span class="inverse-text">The Inverse</span>.`
+      );
+      goddessWhisper("not a curse. a door. walk through it.");
+      showChoices([
+        { id: "rise", label: "Rise", className: "inverse" }
+      ]);
+      log(`<strong>The curse is laid.</strong> The Inverse awakens within you.`);
+    }
+
+    function sceneRise() {
+      setViewportState("cursed");
+      setPrologueText(
+        `${commanderName}, you open your eyes. You are back on the floor of your burning estate. ` +
+        `The smoke is the same. The screams are the same. But <em>you</em> are not. ` +
+        `<br><br>` +
+        `Where her blessing should sit, there is only <span class="inverse-text">the Inverse</span> &mdash; ` +
+        `a cold, inverted light that hums in your chest like a held breath. ` +
+        `Through the shattered doorway, a soldier charges you, blade raised. ` +
+        `You rise to meet him.`
+      );
+      goddessWhisper("she is afraid of you now. she does not know it yet.");
+      showChoices([
+        { id: "firstkill", label: "Cut Him Down", className: "inverse" }
+      ]);
+      log(`<strong>The Inverse hums.</strong> A soldier charges. You rise.`);
+    }
+
+    function sceneFirstKill() {
+      setViewportState("cursed");
+      setPrologueText(
+        `Your blade finds his throat. He falls. ` +
+        `<br><br>` +
+        `And then &mdash; you <em>see</em> it. ` +
+        `<br><br>` +
+        `When you killed the soldiers before, their souls rose from their bodies in a ` +
+        `<span class="gold-text">golden glow</span>, drifting upward toward the Radiant Mother's light ` +
+        `like smoke drawn toward a high window. You had not understood what you were seeing. ` +
+        `Now you do. She was <em>feeding</em>. ` +
+        `<br><br>` +
+        `But this soldier's soul does not rise. ` +
+        `<br><br>` +
+        `It turns <span class="ash-text">black like ash</span>. It curls inward, collapsing on itself ` +
+        `until it is no bigger than a fistful of cinders. Then it turns to you &mdash; ` +
+        `not drifting, but <em>pulled</em>, like iron filings toward a lodestone. ` +
+        `<br><br>` +
+        `It flows into your chest. ` +
+        `<br><br>` +
+        `The Inverse drinks it down. And for the first time since her curse, you feel ` +
+        `<span class="inverse-text">warm</span>.`
+      );
+      goddessWhisper("this is what you are. this is what you were always meant to be. do not apologize for it.");
+      showChoices([
+        { id: "hunt", label: "Rise, and Begin the Hunt", className: "inverse" }
+      ]);
+      log(`<strong>The first harvest of the Inverse.</strong> His soul did not rise &mdash; it flowed into you.`);
+    }
+
+    function sceneHunt() {
+      unlockAchievement("inverse_awakened");
+
+      setViewportState("cursed");
+      setPrologueText(
+        `You step over the body and out of the bedchamber. The corridor is thick with smoke ` +
+        `and shouting. There are more soldiers here. There are always more soldiers. ` +
+        `<br><br>` +
+        `Every one of them will feed the sky tonight &mdash; and the sky will feed ` +
+        `<span class="inverse-text">you</span>. ` +
+        `<br><br>` +
+        `The Radiant Mother believes she has cast you out. In truth, she has forged ` +
+        `her own <span class="inverse-text">antithesis</span> &mdash; a vessel she cannot fill, ` +
+        `a hunger she cannot feed, a void that will one day rise to her throne. ` +
+        `<br><br>` +
+        `Let her fatten her heroes. ` +
+        `<br>` +
+        `You will feast on the harvest.`
+      );
+      goddessWhisper("the sky has never been hers. it was always ours.");
+
+      try {
+        const existing = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+        localStorage.setItem("hinomoto.progress", JSON.stringify({
+          ...existing,
+          prologueComplete: true,
+          inverseActive: true,
+          finishedAt: new Date().toISOString()
+        }));
+      } catch (e) {}
+
+      showChoices([
+        { id: "interlude", label: "Continue to the Interlude", className: "inverse" }
+      ]);
+      log(`<strong>Prologue complete.</strong> The hunt begins.`);
+    }
+
+    function handleChoice(choice) {
+      switch (choice) {
+        case "blade":            return sceneBlade();
+        case "window":           return sceneWindow();
+        case "bed":              return sceneBed();
+
+        case "vanguard_blade":   return sceneVanguardBlade();
+        case "vanguard_window":  return sceneVanguardWindow();
+        case "vanguard_bed":     return sceneVanguardBed();
+
+        case "sneak":            return sceneSneak();
+        case "hide":             return sceneStayHidden();
+        case "slip":             return sceneSlip();
+        case "leap":             return sceneLeap();
+        case "flee":             return sceneFlee();
+        case "fight":            return sceneFight();
+
+        case "die":              return sceneDeath();
+        case "behold":           return sceneMother();
+        case "judged":           return sceneJudgment();
+        case "curse":            return sceneCurse();
+        case "rise":             return sceneRise();
+        case "firstkill":        return sceneFirstKill();
+        case "hunt":             return sceneHunt();
+
+        case "interlude":        window.location.href = "interlude.html"; return;
+
+        default:                 return;
+      }
+    }
+
+    $("#coward-continue").addEventListener("click", () => {
+      cowardModal.classList.remove("visible");
+    });
+
+    cowardModal.addEventListener("click", (e) => {
+      if (e.target === cowardModal) {
+        cowardModal.classList.remove("visible");
+      }
+    });
+
+    $("#reset-prologue").addEventListener("click", restartPrologue);
+
+    /* ---------- DROPDOWN TOGGLE ---------- */
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    restartPrologue();
+  </script>
+</body>
+</html>

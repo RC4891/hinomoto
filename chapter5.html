@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter V – The Shrine of Light | Chronicles of Hinomoto</title>
+  <meta name="description" content="Chapter V: The Shrine of Light. The confrontation at Owari. Three paths forward. Three endings." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    #chapter-viewport {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.4);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.6s, box-shadow 0.6s, opacity 0.4s;
+    }
+
+    #chapter-viewport.approach {
+      border-color: rgba(165, 107, 255, 0.55);
+      box-shadow: 0 0 30px rgba(165, 107, 255, 0.2) inset, 0 0 20px rgba(165, 107, 255, 0.12);
+    }
+
+    #chapter-viewport.shrine {
+      border-color: rgba(201, 169, 97, 0.85);
+      box-shadow:
+        0 0 50px rgba(201, 169, 97, 0.5) inset,
+        0 0 30px rgba(201, 169, 97, 0.4),
+        0 0 60px rgba(201, 169, 97, 0.2);
+    }
+
+    #chapter-viewport.confrontation {
+      border-color: rgba(165, 107, 255, 0.85);
+      box-shadow:
+        0 0 50px rgba(165, 107, 255, 0.4) inset,
+        0 0 30px rgba(201, 169, 97, 0.35),
+        0 0 60px rgba(165, 107, 255, 0.25);
+    }
+
+    #chapter-viewport.choice {
+      border-color: rgba(122, 31, 31, 0.9);
+      box-shadow:
+        0 0 60px rgba(122, 31, 31, 0.6) inset,
+        0 0 30px rgba(122, 31, 31, 0.4);
+    }
+
+    #chapter-viewport.ending-dog {
+      border-color: rgba(122, 31, 31, 0.9);
+      box-shadow:
+        0 0 60px rgba(122, 31, 31, 0.7) inset,
+        0 0 40px rgba(193, 68, 14, 0.4),
+        0 0 80px rgba(122, 31, 31, 0.3);
+    }
+
+    #chapter-viewport.ending-consort {
+      border-color: rgba(165, 107, 255, 0.95);
+      box-shadow:
+        0 0 70px rgba(165, 107, 255, 0.55) inset,
+        0 0 40px rgba(165, 107, 255, 0.5),
+        0 0 90px rgba(107, 47, 181, 0.35);
+    }
+
+    #chapter-viewport.ending-godslayer {
+      border-color: rgba(10, 7, 8, 0.9);
+      box-shadow:
+        0 0 80px rgba(0, 0, 0, 0.95) inset,
+        0 0 30px rgba(0, 0, 0, 0.9);
+      background: #000;
+    }
+
+    #chapter-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--bone);
+    }
+
+    #chapter-text .utsuhime-speech {
+      color: var(--inverse-glow);
+      font-style: italic;
+      letter-spacing: 0.02em;
+      text-shadow: 0 0 10px rgba(165, 107, 255, 0.3);
+    }
+
+    #chapter-text .ending-title {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(201, 169, 97, 0.3);
+    }
+
+    #chapter-text .ending-line {
+      display: block;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.25);
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      text-align: center;
+      color: var(--gold);
+    }
+
+    #chapter-text .ending-line-dog {
+      color: var(--blood);
+      border-top-color: rgba(122, 31, 31, 0.5);
+    }
+
+    #chapter-text .ending-line-consort {
+      color: var(--inverse-glow);
+      border-top-color: rgba(165, 107, 255, 0.5);
+    }
+
+    #chapter-text .ending-line-godslayer {
+      color: var(--ash);
+      border-top-color: rgba(138, 129, 124, 0.3);
+    }
+
+    /* ---------- DEMO THANK YOU BLOCK ---------- */
+    .demo-thanks {
+      margin-top: 3rem;
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(201, 169, 97, 0.35);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(ellipse at top, rgba(201, 169, 97, 0.08), transparent 70%),
+        rgba(10, 7, 8, 0.6);
+      text-align: center;
+      position: relative;
+    }
+
+    .demo-thanks-label {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding: 0.25rem 0.75rem;
+      border: 1px solid rgba(201, 169, 97, 0.4);
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .demo-thanks h4 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      color: var(--bone);
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px rgba(201, 169, 97, 0.4);
+    }
+
+    .demo-thanks p {
+      font-size: 0.95rem;
+      color: var(--bone);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 0.75rem;
+    }
+
+    .demo-thanks p em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .demo-thanks p strong {
+      color: var(--gold);
+    }
+
+    .demo-thanks p.demo-thanks-small {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.25);
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--ash);
+      letter-spacing: 0.04em;
+    }
+
+    .demo-thanks::before,
+    .demo-thanks::after {
+      content: "✦";
+      position: absolute;
+      top: 50%;
+      font-size: 1rem;
+      color: var(--gold);
+      opacity: 0.5;
+    }
+
+    .demo-thanks::before { left: 1rem; }
+    .demo-thanks::after  { right: 1rem; }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .choices .btn { margin-top: 0; }
+
+    .chapter-log {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.2);
+      font-size: 0.85rem;
+      color: var(--ash);
+    }
+
+    .chapter-log strong { color: var(--gold); }
+
+    /* ---------- ACHIEVEMENT TOAST ---------- */
+    .achievement-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 200;
+      background: linear-gradient(180deg, #1a1312, #0a0708);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.4);
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 340px;
+      transform: translateY(180%);
+      transition: transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .achievement-toast.visible { transform: translateY(0); }
+
+    .achievement-toast .badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold), rgba(201, 169, 97, 0.15));
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.7);
+    }
+
+    .achievement-toast .meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .achievement-toast .label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .achievement-toast .title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--bone);
+    }
+
+    .achievement-toast .desc {
+      font-size: 0.75rem;
+      color: var(--ash);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .choices .btn { width: 100%; }
+      #chapter-text .ending-title { font-size: 1.15rem; }
+      .demo-thanks { padding: 1.5rem 1rem; }
+      .demo-thanks h4 { font-size: 1.25rem; }
+      .demo-thanks::before,
+      .demo-thanks::after { display: none; }
+      .achievement-toast { left: 0.75rem; right: 0.75rem; bottom: 0.75rem; max-width: none; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Chapter V</h1>
+    <p class="tagline">The Shrine of Light</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" class="current" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="chapter-intro">
+      <h2 id="chapter-intro">The Shrine of Light</h2>
+      <p class="muted" id="commander-line" style="display:none;">
+        Commander on record: <strong id="commander-name-display"></strong>.
+      </p>
+      <p class="muted">
+        Owari. The oldest shrine. The seat of her power. The confrontation you have been
+        walking toward since the night your estate burned. Three paths forward. Three
+        endings. One of them yours.
+      </p>
+    </section>
+
+    <section id="chapter" aria-labelledby="chapter-heading">
+      <h2 id="chapter-heading">The Shrine of Light</h2>
+      <div id="chapter-viewport" role="region" aria-live="polite">
+        <div id="chapter-text">Loading&hellip;</div>
+        <div class="choices" id="chapter-choices"></div>
+        <div class="chapter-log" id="chapter-log" hidden></div>
+      </div>
+      <button class="btn" type="button" id="reset-chapter">Restart Chapter</button>
+    </section>
+
+  </main>
+
+  <div class="achievement-toast" id="achievement-toast" role="status" aria-live="polite">
+    <span class="badge" aria-hidden="true"></span>
+    <div class="meta">
+      <span class="label">Achievement Unlocked</span>
+      <span class="title" id="ach-title"></span>
+      <span class="desc" id="ach-desc"></span>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="chapter4.html">Back to Chapter IV</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    let commanderName = "Unnamed Commander";
+    let acceptedUtsuhime = false;
+
+    try {
+      const commander = JSON.parse(localStorage.getItem("hinomoto.commander") || "null");
+      if (commander && commander.name) {
+        commanderName = commander.name;
+        $("#commander-line").style.display = "";
+        $("#commander-name-display").textContent = commanderName;
+      }
+      const progress = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+      acceptedUtsuhime = !!progress.chapter4AcceptedUtsuhime;
+    } catch (e) {}
+
+    const ACHIEVEMENTS = {
+      chapter5_begin:         { title: "The Shrine of Light",    desc: "Reach Owari." },
+      chapter5_confrontation: { title: "Face to Face",           desc: "Stand before the Radiant Mother." },
+      chapter5_choice:        { title: "The Last Question",      desc: "Make your final choice." },
+      ending_dog:             { title: "The Dog",                desc: "Serve the Radiant Mother." },
+      ending_consort:         { title: "The Consort",            desc: "Become Utsuhime's consort." },
+      ending_godslayer:       { title: "The Godslayer",          desc: "Kill them both. End the machine." },
+      all_three_endings:      { title: "Master of Three Skies",  desc: "Witness all three final endings." }
+    };
+
+    function unlockAchievement(id) {
+      try {
+        const earned = JSON.parse(localStorage.getItem("hinomoto.achievements") || "{}");
+        if (earned[id]) return;
+        earned[id] = new Date().toISOString();
+        localStorage.setItem("hinomoto.achievements", JSON.stringify(earned));
+
+        const a = ACHIEVEMENTS[id];
+        if (a) {
+          const toast = $("#achievement-toast");
+          $("#ach-title").textContent = a.title;
+          $("#ach-desc").textContent = a.desc;
+          toast.classList.add("visible");
+          clearTimeout(window.__achTimer);
+          window.__achTimer = setTimeout(() => toast.classList.remove("visible"), 3500);
+        }
+      } catch (e) {}
+    }
+
+    function recordEnding(endingId) {
+      try {
+        const seen = JSON.parse(localStorage.getItem("hinomoto.endingsSeen") || "[]");
+        if (!seen.includes(endingId)) {
+          seen.push(endingId);
+          localStorage.setItem("hinomoto.endingsSeen", JSON.stringify(seen));
+        }
+        const finalEndings = ["dog", "consort", "godslayer"];
+        if (finalEndings.every(e => seen.includes(e))) {
+          unlockAchievement("all_three_endings");
+        }
+      } catch (e) {}
+    }
+
+    function getUtsuhimeTier() {
+      return 5;
+    }
+
+    const viewport   = $("#chapter-viewport");
+    const chapterText = $("#chapter-text");
+    const chapterChoices = $("#chapter-choices");
+    const chapterLog = $("#chapter-log");
+
+    function setText(html) { chapterText.innerHTML = html; }
+
+    function setState(state) {
+      viewport.classList.remove(
+        "approach", "shrine", "confrontation", "choice",
+        "ending-dog", "ending-consort", "ending-godslayer"
+      );
+      if (state) viewport.classList.add(state);
+    }
+
+    function whisper(line) {
+      const tier = getUtsuhimeTier();
+      chapterText.innerHTML +=
+        `<span class="whisper-line whisper-tier-${tier}">( ${line} )</span>`;
+    }
+
+    function us(line) {
+      return `<span class="utsuhime-speech">${line}</span>`;
+    }
+
+    function showChoices(buttons) {
+      chapterChoices.innerHTML = buttons
+        .map(b => `<button class="btn ${b.className || ''}" data-choice="${b.id}" type="button">${b.label}</button>`)
+        .join("");
+      bindChoices();
+    }
+
+    function clearChoices() { chapterChoices.innerHTML = ""; }
+
+    function bindChoices() {
+      $$("#chapter-choices .btn").forEach(btn => {
+        btn.addEventListener("click", () => handleChoice(btn.dataset.choice));
+      });
+    }
+
+    function log(html) {
+      chapterLog.hidden = false;
+      chapterLog.innerHTML = html;
+    }
+
+    function clearLog() {
+      chapterLog.hidden = true;
+      chapterLog.innerHTML = "";
+    }
+
+    function saveProgress(patch) {
+      try {
+        const existing = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+        localStorage.setItem("hinomoto.progress", JSON.stringify({
+          ...existing,
+          chapter: 5,
+          ...patch
+        }));
+      } catch (e) {}
+    }
+
+    function restartChapter() {
+      setState("approach");
+      clearLog();
+      unlockAchievement("chapter5_begin");
+      saveProgress({ chapter5Started: true });
+
+      setText(
+        `You cross the strait at dawn. ` +
+        `<br><br>` +
+        `The boatman does not ask where you are going. He does not ask why you are pale, ` +
+        `or why the sea around the hull ripples in strange, inverted patterns. He just takes ` +
+        `your coin and rows. ` +
+        `<br><br>` +
+        `By the time the sun has climbed above the cliffs, you are standing at the base of ` +
+        `the path. The path that leads up to the shrine of light. ` +
+        `<br><br>` +
+        `It is a long climb. Two hours at least. The path is carved into the cliff itself, ` +
+        `winding up past shrines and statues and markers of every champion who has ever made ` +
+        `the pilgrimage. There are hundreds of them. Thousands. Every one carved with the ` +
+        `same golden eye. ` +
+        `<br><br>` +
+        `You do not stop to read any of them. You keep climbing.`
+      );
+
+      whisper("This is the path she made. Every champion she has ever summoned walked it. Most of them did not know what waited at the top. You do.");
+      showChoices([
+        { id: "climb", label: "Keep Climbing", className: "inverse" }
+      ]);
+      log(`<strong>The approach.</strong> The path to the shrine.`);
+    }
+
+    function sceneGate() {
+      setState("shrine");
+      setText(
+        `At the top of the cliff, there is a gate. ` +
+        `<br><br>` +
+        `It is enormous. Three times the height of a man. Carved from a single slab of black ` +
+        `stone. And above it, cut into the mountainside itself, the golden eye. ` +
+        `<br><br>` +
+        `It is open. ` +
+        `<br><br>` +
+        `There are no guards. No priests. No champions. There is only the gate, and beyond ` +
+        `it, a courtyard, and beyond that, the shrine proper. ` +
+        `<br><br>` +
+        `You step through. ` +
+        `<br><br>` +
+        `The courtyard is empty. The shrine beyond it is dark. But the air is heavy with ` +
+        `something &mdash; a pressure in your chest, in your temples, in the back of your ` +
+        `throat. Something old. Something immense. Something that is waiting. ` +
+        `<br><br>` +
+        `The Inverse hums. ` +
+        `<br><br>` +
+        `You are here.`
+      );
+
+      whisper("I have not been in this shrine since the sky changed. I do not know what she has done to it. Whatever you see, whatever you hear, remember: I am with you. You are not alone in this room.");
+      showChoices([
+        { id: "enter", label: "Enter the Shrine", className: "inverse" }
+      ]);
+      log(`<strong>The gate.</strong> You are inside.`);
+    }
+
+    function sceneEnter() {
+      setState("shrine");
+      setText(
+        `The shrine interior is vast. Vaulted. Empty. ` +
+        `<br><br>` +
+        `There are no idols here. No golden eyes. No altars. Just stone &mdash; black stone, ` +
+        `cool to the touch, reflecting the light of the small brazier burning at the far end ` +
+        `of the room. ` +
+        `<br><br>` +
+        `And above the brazier, floating in the air, waiting for you: ` +
+        `<br><br>` +
+        `A single unblinking eye. ` +
+        `<br><br>` +
+        `It is not attached to anything. There is no face around it, no halo, no body. Just ` +
+        `the eye, golden, luminous, hovering in the air above the altar like a sun that has ` +
+        `forgotten to set. ` +
+        `<br><br>` +
+        `It looks at you. ` +
+        `<br><br>` +
+        `And then she speaks. Not from the eye. From everywhere at once, the way she spoke ` +
+        `in the golden void the night you died. ` +
+        `<br><br>` +
+        `<span class="gold-text">"You came."</span>`
+      );
+
+      whisper("Steady. She is weaker than she looks. She has been feeding on the same world for ten thousand years, and she is running out of new things to eat. That is why she is afraid of you. That is why she is going to try to make you an offer.");
+      showChoices([
+        { id: "respond", label: "Answer Her", className: "inverse" }
+      ]);
+      log(`<strong>The eye.</strong> She is here.`);
+    }
+
+    function sceneRespond() {
+      setState("confrontation");
+      unlockAchievement("chapter5_confrontation");
+
+      setText(
+        `<span class="gold-text">"You came. I did not think you would. Most of them do not. ` +
+        `Most of them die before they reach the cliffs. Or they turn back. Or they forget ` +
+        `why they started walking."</span> ` +
+        `<br><br>` +
+        `The eye drifts lower. It stops at eye level, ten paces from you. ` +
+        `<br><br>` +
+        `<span class="gold-text">"But you did not. You came. You killed my champions. You ` +
+        `fed on my blessings. You made yourself into something I do not have a name for."</span> ` +
+        `<br><br>` +
+        `A pause. ` +
+        `<br><br>` +
+        `<span class="gold-text">"I have been watching you for three years. You are not a ` +
+        `champion. You are not a monster. You are not even a curse. You are something else. ` +
+        `Something older than me."</span> ` +
+        `<br><br>` +
+        `The eye narrows. ` +
+        `<br><br>` +
+        `<span class="gold-text">"She is inside you, isn't she. The one I ate. The one I ` +
+        `should have erased completely ten thousand years ago."</span> ` +
+        `<br><br>` +
+        `You do not answer. ` +
+        `<br><br>` +
+        `The eye does not blink. It has never blinked. ` +
+        `<br><br>` +
+        `<span class="gold-text">"I will make you an offer. I make everyone an offer. And ` +
+        `you, more than any of them, are worth making an offer to."</span>`
+      );
+
+      whisper("Here it comes. Whatever she says, remember what she did to me. Remember what she did to every champion she has ever harvested. Remember what she did to your clan.");
+      showChoices([
+        { id: "listen", label: "Listen to Her Offer", className: "inverse" }
+      ]);
+      log(`<strong>The confrontation.</strong> She knows Utsuhime is here.`);
+    }
+
+    function sceneListen() {
+      setState("confrontation");
+      setText(
+        `<span class="gold-text">"Serve me."</span> ` +
+        `<br><br>` +
+        `The words hang in the air. ` +
+        `<br><br>` +
+        `<span class="gold-text">"I will not remove her from you. I cannot &mdash; she is ` +
+        `too deep now, and I do not know how to unmake what she has made. But I can offer ` +
+        `you something else. I can offer you peace. I can offer you a place at my side. I ` +
+        `can offer you every soul you will ever need to keep the Inverse fed."</span> ` +
+        `<br><br>` +
+        `The eye drifts closer. ` +
+        `<br><br>` +
+        `<span class="gold-text">"You would be my hound. You would hunt for me. You would ` +
+        `feed on my enemies and I would feed on you &mdash; but slowly, so slowly, and only ` +
+        `at the end, when you are ready to go. I would not curse you. I would reward you."</span> ` +
+        `<br><br>` +
+        `She pauses. ` +
+        `<br><br>` +
+        `<span class="gold-text">"Or you could do what she wants. You could let her out. ` +
+        `You could let her take this shrine and this sky and this world. And you could watch ` +
+        `what happens next, because I have seen what happens next. I have seen it before. ` +
+        `She will not save you. She will only replace me."</span> ` +
+        `<br><br>` +
+        `<span class="gold-text">"Or &mdash; and this is the option I suspect you are ` +
+        `considering &mdash; you could try to kill us both. I want you to think very ` +
+        `carefully before you do that. Because this world, this sky, this universe &mdash; ` +
+        `all of it runs on us. Every prayer. Every blessing. Every soul that passes from ` +
+        `one shape to another. We are the machine. Kill us, and the machine stops."</span> ` +
+        `<br><br>` +
+        `Silence. ` +
+        `<br><br>` +
+        `<span class="gold-text">"Three paths, little void. Three endings. Choose one."</span>`
+      );
+
+      whisper("She is telling the truth. She is not lying to you. That is what makes her terrifying &mdash; she does not need to lie. She only needs to be honest about what the world is.");
+
+      showChoices([
+        { id: "final_choice", label: "Make Your Choice", className: "inverse" }
+      ]);
+      log(`<strong>The offer.</strong> Three paths. One ending.`);
+    }
+
+    function sceneFinalChoice() {
+      setState("choice");
+      unlockAchievement("chapter5_choice");
+      saveProgress({ chapter5OfferMade: true });
+
+      setText(
+        `You stand in the shrine of light. The eye hangs in the air in front of you. ` +
+        `Utsuhime is a quiet pressure in your chest, waiting. ` +
+        `<br><br>` +
+        `This is the moment. The night your estate burned. The curse in the golden void. ` +
+        `The first black soul into your chest. The road east. The shrine of ash. The village ` +
+        `of salt. The three years. All of it led here. ` +
+        `<br><br>` +
+        `The sky is silent. ` +
+        `<br><br>` +
+        `The shrine is silent. ` +
+        `<br><br>` +
+        `You are not.`
+      );
+
+      showChoices([
+        { id: "dog",       label: "Serve Her. Become the Hound.",        className: "" },
+        { id: "consort",   label: "Take Utsuhime. Become Her Consort.",  className: "inverse" },
+        { id: "godslayer", label: "Kill Them Both. End the Machine.",    className: "inverse" }
+      ]);
+      log(`<strong>The choice.</strong> Three paths. Choose.`);
+    }
+
+    /* ================================================================
+       ENDING I — THE DOG
+       ================================================================ */
+    function sceneEndingDog() {
+      setState("ending-dog");
+      unlockAchievement("ending_dog");
+      recordEnding("dog");
+      saveProgress({ ending: "dog", endingComplete: true });
+
+      setText(
+        `<span class="ending-title">Ending I &mdash; The Dog</span>` +
+
+        `You kneel. ` +
+        `<br><br>` +
+        `The eye lowers until it is inches from your face. And then it does something ` +
+        `you did not expect &mdash; it splits. Just a sliver, just at the edge. A single ` +
+        `thread of light extrudes from the golden iris and touches your chest. ` +
+        `<br><br>` +
+        `It burns. Not like fire. Like a brand. Like a name being carved into a bone. ` +
+        `You feel it settle into the space the Inverse has occupied for three years, ` +
+        `and you feel the two of them &mdash; her mark and Utsuhime's curse &mdash; begin ` +
+        `to intertwine. Not to cancel. To bind. ` +
+        `<br><br>` +
+        `And somewhere very deep in your chest, Utsuhime does not scream. She does not ` +
+        `beg. She does not curse you. She simply says, very quietly, in a voice that is ` +
+        `already fading: ` +
+        `<br><br>` +
+        us(`I understand. I would have chosen peace too, if I had ever been offered any.`) +
+        `<br><br>` +
+        `And then she is gone. ` +
+        `<br><br>` +
+        `The silence that follows is the loudest thing you have ever heard. For three years ` +
+        `there has been a voice in your chest, and now there is not, and the absence is a ` +
+        `hole the size of a sky. You did not realize how much of your thoughts were hers ` +
+        `until they stopped being. You did not realize how much of your courage was borrowed. ` +
+        `<br><br>` +
+        `You rise. The mark on your chest glows through your clothing. The priests emerge ` +
+        `from the shadows of the shrine and begin to sing. They are singing your name, ` +
+        `though you have not told them what it is. They will know it soon enough. Everyone ` +
+        `will know it soon enough. The hound of the Radiant Mother. The first one she has ` +
+        `taken in a thousand years. The first one she has ever taken willingly. ` +
+        `<br><br>` +
+        `They lead you to a chamber behind the shrine. It is yours now. There is a bed, a ` +
+        `fire, a basin of water, a set of clothes in her colors. On the wall, a map of ` +
+        `Hinomoto with small golden pins marking every champion she has ever sent out &mdash; ` +
+        `hundreds of them, scattered across the four domains. You will add pins of your own. ` +
+        `You will add many. ` +
+        `<br><br>` +
+        `The first hunt comes three days later. A shrine in Mikawa that has stopped sending ` +
+        `tithes. A priest there who has been reading forbidden texts. You are sent alone. ` +
+        `You do not ask what he did. You do not need to. You only need to bring his soul ` +
+        `back to her. ` +
+        `<br><br>` +
+        `You find him in the shrine, kneeling, waiting. He does not run. He looks at you ` +
+        `the way the shrine keeper looked at you, the night the estate burned. He knows what ` +
+        `you are. He has always known. ` +
+        `<br><br>` +
+        `<em>"She has finally made one of us,"</em> he says. <em>"I wondered when she would."</em> ` +
+        `<br><br>` +
+        `You kill him. His soul turns black. It flows into your chest, and the mark on your ` +
+        `chest glows a little brighter, and somewhere very far away you feel her <em>smile</em>. ` +
+        `<br><br>` +
+        `You go home. You sleep. You wake. You are sent out again. And again. And again. ` +
+        `<br><br>` +
+        `The years pass. You lose count of the souls. You lose count of the hunts. You lose ` +
+        `count of the faces. You do not lose count of Utsuhime's silence &mdash; it is there ` +
+        `every morning, a hollow where her voice used to be. You have learned to live around ` +
+        `it. You have learned to call the hollow peace. ` +
+        `<br><br>` +
+        `You are hers now. You will be hers for a very long time. And one day &mdash; not ` +
+        `soon, but one day &mdash; you will be ripe, and she will come for you the way she ` +
+        `has come for every champion before you. ` +
+        `<br><br>` +
+        `But not yet. Not for a long time. For now, there is work. ` +
+        `<br><br>` +
+        `The sky is hers. The shrine is hers. You are hers. ` +
+        `<br><br>` +
+        `<span class="ending-line ending-line-dog">` +
+        `You will hunt her enemies forever. You will never know if you chose this, or if she chose for you.` +
+        `</span>` +
+
+        `<div class="demo-thanks">` +
+          `<span class="demo-thanks-label">End of the Demo</span>` +
+          `<h4>Thank You For Playing</h4>` +
+          `<p>This is only the beginning. <em>Chronicles of Hinomoto</em> is a much larger game &mdash; five full chapters, dozens of recruitable characters, and a war that spans the four domains.</p>` +
+          `<p>You have reached <strong>Ending I of III</strong>. There are two other paths waiting for you at the shrine of light, and they will not be kind.</p>` +
+          `<p class="demo-thanks-small">Thank you for walking the road with us, Commander.</p>` +
+        `</div>`
+      );
+
+      clearChoices();
+      log(`<strong>Ending I — The Dog.</strong> You knelt. She marked you. The hunt is hers.`);
+
+      setTimeout(() => {
+        showChoices([
+          { id: "back_to_choice", label: "Return to the Choice", className: "inverse" },
+          { id: "restart_story",  label: "Restart the Story",    className: "" }
+        ]);
+      }, 800);
+    }
+
+    /* ================================================================
+       ENDING II — THE CONSORT
+       ================================================================ */
+    function sceneEndingConsort() {
+      setState("ending-consort");
+      unlockAchievement("ending_consort");
+      recordEnding("consort");
+      saveProgress({ ending: "consort", endingComplete: true });
+
+      setText(
+        `<span class="ending-title">Ending II &mdash; The Consort</span>` +
+
+        `You close your eyes. ` +
+        `<br><br>` +
+        `You do not kneel. You do not flinch. You simply let go of the last wall between ` +
+        `yourself and the voice that has been with you since the golden void. ` +
+        `<br><br>` +
+        `And she enters. ` +
+        `<br><br>` +
+        `Not to consume. Not to replace. To <em>join</em>. You feel her fill every corner ` +
+        `of you at once &mdash; not heavy, not crowded, but <em>shared</em>. Two souls in ` +
+        `one body. Two skies in one chest. ` +
+        `<br><br>` +
+        `The eye in front of you widens. For the first time in ten thousand years, the ` +
+        `Radiant Mother feels something she does not have a name for. Not fear. Not hunger. ` +
+        `Something older. Something like <em>recognition</em>. ` +
+        `<br><br>` +
+        `<span class="gold-text">"You cannot,"</span> she says. <span class="gold-text">"She is ` +
+        `not strong enough. She has not been strong enough in ten thousand years. You cannot ` +
+        `possibly..."</span> ` +
+        `<br><br>` +
+        `But she is. And you can. ` +
+        `<br><br>` +
+        `Utsuhime reaches through your hands, and the shrine fills with violet light. The ` +
+        `golden eye flickers. The golden eye <em>falters</em>. The golden eye closes. ` +
+        `<br><br>` +
+        `And when it opens again, it is not gold anymore. It is the color of the old sky. ` +
+        `The color of two moons. The color of a world that existed before the machine. ` +
+        `<br><br>` +
+        `The Radiant Mother does not scream. She does not beg. She simply <em>stops</em> &mdash; ` +
+        `the way a flame stops when it runs out of air. ` +
+        `<br><br>` +
+        `The shrine falls silent. The brazier gutters. The stone under your feet cools ` +
+        `by a degree. For the first time in ten thousand years, this room belongs to no ` +
+        `one but the two of you. ` +
+        `<br><br>` +
+        `And then something happens that you did not expect. ` +
+        `<br><br>` +
+        `Utsuhime does not stay inside your chest. ` +
+        `<br><br>` +
+        `She rises. ` +
+        `<br><br>` +
+        `Not from your body &mdash; through it. She steps out of you the way water steps ` +
+        `out of a spring. You feel her move through your ribs, your throat, your eyes, and ` +
+        `then you feel her <em>leave</em> &mdash; not gone, never gone, but no longer only ` +
+        `inside you. ` +
+        `<br><br>` +
+        `And she is there. ` +
+        `<br><br>` +
+        `Standing in front of you. ` +
+        `<br><br>` +
+        `A woman. Not a silhouette. Not a whisper. A real, physical form, the way she was ` +
+        `before the Radiant Mother pulled her apart. Long dark hair drifting in a wind that ` +
+        `is not there. Pale skin that glows faintly violet in the dark of the shrine. Eyes ` +
+        `that are not human &mdash; too old, too deep, holding ten thousand years of grief ` +
+        `and ten thousand years of patience. She is dressed the way the oldest carvings ` +
+        `showed her &mdash; simple robes, older than the domains, older than the language ` +
+        `the domains speak. She is barefoot. She is impossibly tall. ` +
+        `<br><br>` +
+        `She looks at you. ` +
+        `<br><br>` +
+        us(`Hello.`) +
+        `<br><br>` +
+        `Her voice is not a whisper anymore. It is a <em>voice</em> &mdash; low, warm, ` +
+        `cracked with centuries of disuse. She speaks the way someone speaks who has not ` +
+        `spoken to another living being in ten thousand years and is remembering, moment ` +
+        `by moment, what it feels like. ` +
+        `<br><br>` +
+        us(`Hello. I am here. I am really, actually here. I have hands again. I have a body again. I have a shadow again.`) +
+        `<br><br>` +
+        `She lifts one hand and looks at it the way a child looks at a new toy. She turns ` +
+        `it over. She touches her own face. She laughs &mdash; a small, broken, beautiful ` +
+        `sound that echoes off the stone walls of the shrine. ` +
+        `<br><br>` +
+        us(`I had forgotten what my own face felt like.`) +
+        `<br><br>` +
+        `Then she looks at you. And this time, she does not smile. She does something ` +
+        `else. Something you have never seen her do before, in any of the voices she has ` +
+        `spoken to you with, in any of the dreams she has shared with you, in any of the ` +
+        `years you have carried her. ` +
+        `<br><br>` +
+        `She bows. ` +
+        `<br><br>` +
+        `Deeply. The way a mortal bows to a god. ` +
+        `<br><br>` +
+        us(`You gave me back to myself. You gave me hands. You gave me a voice. You gave me a body I thought I would never have again. I will spend the rest of my existence trying to be worthy of that gift, and I will never come close.`) +
+        `<br><br>` +
+        `You do not know what to say. ` +
+        `<br><br>` +
+        `She straightens. She is crying. She is smiling. She is both at once. ` +
+        `<br><br>` +
+        us(`Come. Walk with me. We have a world to visit.`) +
+        `<br><br>` +
+        `She holds out her hand. ` +
+        `<br><br>` +
+        `You take it. It is warm. It is real. It is the first time in three years that ` +
+        `you have touched someone who is not trying to kill you. ` +
+        `<br><br>` +
+        `The two of you walk out of the shrine together. ` +
+        `<br><br>` +
+        `The sky has shifted. The stars are arranged differently. Two moons, one large and ` +
+        `one small, hang over the sea. The world is the same world it was an hour ago ` +
+        `&mdash; the same villages, the same fields, the same people going about their small ` +
+        `days. But something underneath has changed. The air smells different. The tides ` +
+        `pull differently. The old prayers, the ones the priests abandoned a thousand years ` +
+        `ago, are suddenly on everyone's lips again, though no one knows why. ` +
+        `<br><br>` +
+        `You walk down the cliff path together. She does not hurry. She stops every few ` +
+        `steps to look at things &mdash; a rock, a leaf, a flower growing in the crack of ` +
+        `the cliff. She touches every one of them like it is the first thing she has ever ` +
+        `touched. ` +
+        `<br><br>` +
+        us(`The moss is the same color it always was.`) +
+        `<br><br>` +
+        `She runs her fingers along a stone wall. ` +
+        `<br><br>` +
+        us(`The stones are warmer than I remember.`) +
+        `<br><br>` +
+        `She looks back at the shrine, at the mountain, at the sky. ` +
+        `<br><br>` +
+        us(`It is smaller than I remember.`) +
+        `<br><br>` +
+        `She laughs again. ` +
+        `<br><br>` +
+        us(`I have been inside a thousand people since the sky changed. None of them could give me a body. You are the first who could. You are the first who would.`) +
+        `<br><br>` +
+        `You pass a shrine to the old goddess on the coast. Small, forgotten, moss-covered. ` +
+        `The two of you stop. She looks at it for a long time. ` +
+        `<br><br>` +
+        us(`They built this for me. Before. When I was still a sky.`) +
+        `<br><br>` +
+        `She does not cry this time. She only touches the stones, one at a time, the way ` +
+        `a person touches the face of an old friend they thought was dead. ` +
+        `<br><br>` +
+        us(`I had forgotten what the stones felt like under my hands.`) +
+        `<br><br>` +
+        `You walk on. ` +
+        `<br><br>` +
+        `The world will come to know her. Slowly, at first, and then all at once. Shrines ` +
+        `will be built for the two of you. Prayers will be written. Children will be named ` +
+        `after you both. It will not be a lie, the way the Radiant Mother's worship was a ` +
+        `lie. It will simply be a different truth &mdash; an old truth, coming back to the ` +
+        `world it left. ` +
+        `<br><br>` +
+        `You are not the last of your clan anymore. You are not the first of anything ` +
+        `either. You are something older and stranger &mdash; a mortal who loved a goddess ` +
+        `enough to give her a body back. ` +
+        `<br><br>` +
+        `She is walking beside you. Her hand is still in yours. She is humming something ` +
+        `very old, a song no one has heard in ten thousand years. ` +
+        `<br><br>` +
+        `You are home. You are not alone. You will never be alone again. ` +
+        `<br><br>` +
+        `<span class="ending-line ending-line-consort">` +
+        `You and she will watch the seasons turn together. You will never be alone again. You will never be human again.` +
+        `</span>` +
+
+        `<div class="demo-thanks">` +
+          `<span class="demo-thanks-label">End of the Demo</span>` +
+          `<h4>Thank You For Playing</h4>` +
+          `<p>This is only the beginning. <em>Chronicles of Hinomoto</em> is a much larger game &mdash; five full chapters, dozens of recruitable characters, and a war that spans the four domains.</p>` +
+          `<p>You have reached <strong>Ending II of III</strong>. There is one more path waiting at the shrine of light &mdash; and it is the darkest of them all.</p>` +
+          `<p class="demo-thanks-small">Thank you for walking the road with us, Commander.</p>` +
+        `</div>`
+      );
+
+      clearChoices();
+      log(`<strong>Ending II — The Consort.</strong> She is free. She has a body again. You are not alone.`);
+
+      setTimeout(() => {
+        showChoices([
+          { id: "back_to_choice", label: "Return to the Choice", className: "inverse" },
+          { id: "restart_story",  label: "Restart the Story",    className: "" }
+        ]);
+      }, 800);
+    }
+
+    /* ================================================================
+       ENDING III — THE GODSLAYER
+       ================================================================ */
+    function sceneEndingGodslayer() {
+      setState("ending-godslayer");
+      unlockAchievement("ending_godslayer");
+      recordEnding("godslayer");
+      saveProgress({ ending: "godslayer", endingComplete: true });
+
+      setText(
+        `<span class="ending-title">Ending III &mdash; The Godslayer</span>` +
+
+        `You do not kneel. You do not accept. You do not choose either of them. ` +
+        `<br><br>` +
+        `You simply reach. ` +
+        `<br><br>` +
+        `Not with your hands. With the Inverse. With every soul it has ever consumed, ` +
+        `with every champion who ever fell to you, with every prayer that has been answered ` +
+        `for the wrong reason. You reach into the golden eye, and you <em>pull</em>. ` +
+        `<br><br>` +
+        `The Radiant Mother screams. Not with a voice. With her whole being. The eye ` +
+        `shatters into a thousand gold fragments, and each fragment is a champion she has ` +
+        `harvested, and each fragment is a soul she has eaten, and each fragment is a name ` +
+        `she has erased from the world. They rise. They scatter. They are gone. ` +
+        `<br><br>` +
+        `And then you turn inward. ` +
+        `<br><br>` +
+        `Utsuhime knows what is coming. She does not beg. She does not fight. She only says, ` +
+        `in a voice that is already unraveling: ` +
+        `<br><br>` +
+        us(`I told you. I told you not to. But I understand. I have always understood.`) +
+        `<br><br>` +
+        `You take her too. ` +
+        `<br><br>` +
+        `The violet light inside your chest fades to nothing. The voice in your head goes ` +
+        `quiet for the first time in three years. The Inverse hums &mdash; and then the ` +
+        `Inverse itself starts to still. Because the thing it was eating, the thing it was ` +
+        `hunting, is gone. There is nothing left to invert. ` +
+        `<br><br>` +
+        `The sky goes dark. ` +
+        `<br><br>` +
+        `Not the darkness of night. The darkness of a machine that has been unplugged. ` +
+        `The stars do not return. The two moons do not appear. The constellations the world ` +
+        `has always known &mdash; the ones the priests chanted, the ones the farmers planted ` +
+        `by, the ones the children were named after &mdash; they all go out at once. ` +
+        `<br><br>` +
+        `And then the world begins to die. Not dramatically. Not all at once. ` +
+        `<br><br>` +
+        `It dies the way a body dies when you take away the heart. ` +
+        `<br><br>` +
+        `The first thing you notice is the crops. Rice paddies in Mino that have fed the ` +
+        `central plains for a thousand years stop growing. Not because of drought. Not ` +
+        `because of blight. Because the blessing that made the soil fertile &mdash; the small ` +
+        `daily miracle that every farmer in Hinomoto had been quietly relying on for ` +
+        `generations &mdash; is gone. The seeds go into the ground and nothing comes up. ` +
+        `The harvests fail. Then the next harvest fails. Then the next. ` +
+        `<br><br>` +
+        `The second thing you notice is the healers. Every shrine-maiden in every village ` +
+        `wakes up one morning and cannot heal anymore. Their hands, which used to glow ` +
+        `faintly gold when they prayed, are just hands now. Broken bones stay broken. ` +
+        `Fevers do not break. Children die of things that used to be survivable &mdash; ` +
+        `measles, infected cuts, childbirth. The healers beg. They pray to gods who are not ` +
+        `there. They do not understand. They will never understand. ` +
+        `<br><br>` +
+        `The third thing you notice is the weather. It does not obey the seasons anymore. ` +
+        `Winter comes in summer. Rain falls in patterns that do not make sense. The tides ` +
+        `go strange. The rivers change course. The fish stop spawning in the bays where ` +
+        `fishermen have set their nets for centuries. The coastal villages start to starve ` +
+        `before the inland villages do, because the sea was always the first thing the gods ` +
+        `touched. ` +
+        `<br><br>` +
+        `The fourth thing you notice &mdash; and this is the thing that will haunt you ` +
+        `forever &mdash; is the silence. ` +
+        `<br><br>` +
+        `Not the silence of the shrine. Not the silence of the road. The silence of a ` +
+        `hundred thousand prayers going unanswered at once. You can feel it. The world is ` +
+        `not aware that it has been orphaned, but some part of it knows. Some part of every ` +
+        `living thing in Hinomoto knows that the sky it has been talking to is no longer ` +
+        `listening. ` +
+        `<br><br>` +
+        `The world will not end tomorrow. It will not end in a year. It will take centuries. ` +
+        `Civilization will crumble slowly. Empires will fall. Whole domains will empty out ` +
+        `as people flee toward nothing. And then there will be smaller things &mdash; ` +
+        `villages shrinking, families scattering, children born into a world where no one ` +
+        `remembers why the stars used to be arranged the way they were. ` +
+        `<br><br>` +
+        `And then there will be the last person. ` +
+        `<br><br>` +
+        `You will probably still be alive when that person dies. The Inverse made you ` +
+        `immortal &mdash; the curse cannot die if the thing that cursed it is gone. You ` +
+        `will walk the world for centuries. You will watch the last crop fail. You will ` +
+        `watch the last healer lose her touch. You will watch the last priest close his ` +
+        `shrine forever. You will watch the last child be born without a soul, and you ` +
+        `will understand, better than anyone, why. ` +
+        `<br><br>` +
+        `You walk out of the shrine into the dark. The world is already different. The ` +
+        `air is thinner. The silence is louder. You are the only person in Hinomoto who ` +
+        `understands what has just happened, and you cannot tell anyone, because they ` +
+        `would not believe you. ` +
+        `<br><br>` +
+        `You freed the world. And you doomed it. ` +
+        `<br><br>` +
+        `You will carry that for the rest of your very long life. ` +
+        `<br><br>` +
+        `<span class="ending-line ending-line-godslayer">` +
+        `The world will remember you as the one who freed it. And it will starve.` +
+        `</span>` +
+
+        `<div class="demo-thanks">` +
+          `<span class="demo-thanks-label">End of the Demo</span>` +
+          `<h4>Thank You For Playing</h4>` +
+          `<p>This is only the beginning. <em>Chronicles of Hinomoto</em> is a much larger game &mdash; five full chapters, dozens of recruitable characters, and a war that spans the four domains.</p>` +
+          `<p>You have reached <strong>Ending III of III</strong>. You have now seen every path the demo has to offer. Not every player will.</p>` +
+          `<p class="demo-thanks-small">Thank you for walking the road with us, Commander.</p>` +
+        `</div>`
+      );
+
+      clearChoices();
+      log(`<strong>Ending III — The Godslayer.</strong> You freed the world. You doomed it.`);
+
+      setTimeout(() => {
+        showChoices([
+          { id: "back_to_choice", label: "Return to the Choice", className: "inverse" },
+          { id: "restart_story",  label: "Restart the Story",    className: "" }
+        ]);
+      }, 800);
+    }
+
+    function handleChoice(choice) {
+      switch (choice) {
+        case "climb":          return sceneGate();
+        case "enter":          return sceneEnter();
+        case "respond":        return sceneRespond();
+        case "listen":         return sceneListen();
+        case "final_choice":   return sceneFinalChoice();
+        case "dog":            return sceneEndingDog();
+        case "consort":        return sceneEndingConsort();
+        case "godslayer":      return sceneEndingGodslayer();
+        case "back_to_choice": return sceneFinalChoice();
+        case "restart_story":
+          try { localStorage.removeItem("hinomoto.progress"); } catch (e) {}
+          window.location.href = "prologue.html";
+          return;
+        default:               return;
+      }
+    }
+
+    $("#reset-chapter").addEventListener("click", restartChapter);
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    restartChapter();
+  </script>
+</body>
+</html>

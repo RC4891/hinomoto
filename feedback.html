@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Courier &amp; Playtester Feedback – Chronicles of Hinomoto</title>
+  <meta name="description" content="Submit bug reports, pacing feedback, and stat-balance impressions for Chronicles of Hinomoto." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ---------- PAGE-SPECIFIC: NARROWER MAIN ---------- */
+    main {
+      max-width: 720px;
+      gap: 2rem;
+    }
+
+    /* ---------- PAGE-SPECIFIC: FORM LAYOUT ---------- */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    .field label .req {
+      color: var(--ember-glow);
+      margin-left: 0.25rem;
+    }
+
+    .btn { align-self: flex-start; }
+
+    /* ---------- PAGE-SPECIFIC: CONFIRMATION PANEL ---------- */
+    #confirmation {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+      border: 1px solid rgba(165, 107, 255, 0.4);
+      background: linear-gradient(180deg, rgba(107, 47, 181, 0.18), rgba(10, 7, 8, 0.6));
+      border-radius: var(--radius);
+    }
+
+    #confirmation.visible { display: block; }
+
+    #confirmation h3 {
+      font-family: var(--font-display);
+      color: var(--inverse-glow);
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+
+    #confirmation p {
+      color: var(--bone);
+      margin-bottom: 0.5rem;
+    }
+
+    #confirmation .seal {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      display: block;
+      filter: drop-shadow(0 0 10px rgba(165, 107, 255, 0.6));
+    }
+
+    @media (max-width: 600px) {
+      .btn { align-self: stretch; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Courier &amp; Playtester Feedback</h1>
+    <p class="tagline">Report what you have seen on the road</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html" class="active">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="feedback-heading">
+      <h2 id="feedback-heading">Dispatch a Message</h2>
+      <p class="muted">
+        Every courier who walks the road sees something the commanders miss. Whether you
+        found a <span class="ember-text">broken branch in the prologue</span>, an
+        imbalance in the <span class="inverse-text">negative math</span>, or a line of lore
+        that doesn't sit right &mdash; send word.
+      </p>
+
+      <form id="feedback-form" novalidate>
+        <div class="field">
+          <label for="fb-name">Commander Name <span class="req">*</span></label>
+          <input type="text" id="fb-name" name="name" placeholder="e.g. Akira no Hinomoto" required />
+        </div>
+
+        <div class="field">
+          <label for="fb-email">Email <span class="req">*</span></label>
+          <input type="email" id="fb-email" name="email" placeholder="you@example.com" required />
+          <span class="hint">Only used to reply to your report. No courier spam.</span>
+        </div>
+
+        <div class="field">
+          <label for="fb-category">Category <span class="req">*</span></label>
+          <select id="fb-category" name="category" required>
+            <option value="" disabled selected>Choose a scroll...</option>
+            <option value="inverse-lore">Inverse Lore</option>
+            <option value="negative-math">Negative Math Balance</option>
+            <option value="bug-report">Bug Report</option>
+            <option value="pacing">Pacing &amp; Flow</option>
+            <option value="endings">Endings &amp; Epilogues</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="fb-message">Message <span class="req">*</span></label>
+          <textarea id="fb-message" name="message" placeholder="Speak plainly. What did you see?" required></textarea>
+        </div>
+
+        <button class="btn inverse" type="submit">Send by Courier</button>
+      </form>
+    </section>
+
+    <section id="confirmation" aria-live="polite" aria-labelledby="confirmation-heading">
+      <svg class="seal" viewBox="0 0 100 100" aria-hidden="true" role="img">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#a56bff" stroke-width="2"/>
+        <path d="M30 52 L44 66 L72 34"
+              fill="none" stroke="#a56bff" stroke-width="4"
+              stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3 id="confirmation-heading">Message Received</h3>
+      <p id="confirmation-text">The courier rides at dawn. Your words will reach the war room.</p>
+      <p class="muted">Thank you for walking the road with us, Commander.</p>
+      <button class="btn" type="button" id="send-another" style="margin-top: 1rem;">Send Another</button>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="lore.html">Lore Archive</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const form         = document.getElementById("feedback-form");
+    const confirmation = document.getElementById("confirmation");
+    const confirmText  = document.getElementById("confirmation-text");
+    const nameInput    = document.getElementById("fb-name");
+    const emailInput   = document.getElementById("fb-email");
+    const catInput     = document.getElementById("fb-category");
+    const msgInput     = document.getElementById("fb-message");
+
+    const CATEGORY_FLAVOR = {
+      "inverse-lore":  "The archivists will weigh your words against the Ash-Stained Scroll.",
+      "negative-math": "The war room will rebalance the Inverse math on your report.",
+      "bug-report":    "The engineers will hunt the broken branch you described.",
+      "pacing":        "The chroniclers will tune the rhythm of the prologue.",
+      "endings":       "The keepers of the three endings will weigh your words carefully.",
+      "other":         "The courier will carry your words to the war room."
+    };
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name  = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const cat   = catInput.value;
+      const msg   = msgInput.value.trim();
+
+      if (!name || !email || !cat || !msg) {
+        alert("A courier cannot ride with a blank scroll. Please fill every field.");
+        return;
+      }
+
+      confirmText.textContent =
+        `${name}, your message has been sealed and sent. ` +
+        (CATEGORY_FLAVOR[cat] || CATEGORY_FLAVOR["other"]);
+
+      form.style.display = "none";
+      confirmation.classList.add("visible");
+      confirmation.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    document.getElementById("send-another").addEventListener("click", () => {
+      form.reset();
+      form.style.display = "";
+      confirmation.classList.remove("visible");
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

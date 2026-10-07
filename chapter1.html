@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter I – The Road East | Chronicles of Hinomoto</title>
+  <meta name="description" content="Chapter I: The Road East. The first night alone. The first shrine. The first champion." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    #chapter-viewport {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.4);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.6s, box-shadow 0.6s, opacity 0.4s;
+    }
+
+    #chapter-viewport.road {
+      border-color: rgba(165, 107, 255, 0.55);
+      box-shadow: 0 0 30px rgba(165, 107, 255, 0.2) inset, 0 0 20px rgba(165, 107, 255, 0.12);
+    }
+
+    #chapter-viewport.shrine {
+      border-color: rgba(201, 169, 97, 0.55);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.2) inset;
+    }
+
+    #chapter-viewport.combat {
+      border-color: rgba(165, 107, 255, 0.8);
+      box-shadow: 0 0 40px rgba(165, 107, 255, 0.35) inset, 0 0 24px rgba(165, 107, 255, 0.25);
+    }
+
+    #chapter-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--bone);
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .choices .btn { margin-top: 0; }
+
+    .chapter-log {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.2);
+      font-size: 0.85rem;
+      color: var(--ash);
+    }
+
+    .chapter-log strong { color: var(--gold); }
+
+    /* ---------- ACHIEVEMENT TOAST ---------- */
+    .achievement-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 200;
+      background: linear-gradient(180deg, #1a1312, #0a0708);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.4);
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 340px;
+      transform: translateY(180%);
+      transition: transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .achievement-toast.visible { transform: translateY(0); }
+
+    .achievement-toast .badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold), rgba(201, 169, 97, 0.15));
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.7);
+    }
+
+    .achievement-toast .meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .achievement-toast .label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .achievement-toast .title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--bone);
+    }
+
+    .achievement-toast .desc {
+      font-size: 0.75rem;
+      color: var(--ash);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .choices .btn { width: 100%; }
+      .achievement-toast { left: 0.75rem; right: 0.75rem; bottom: 0.75rem; max-width: none; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Chapter I</h1>
+    <p class="tagline">The Road East</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" class="current" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="chapter-intro">
+      <h2 id="chapter-intro">The Road East</h2>
+      <p class="muted" id="commander-line" style="display:none;">
+        Commander on record: <strong id="commander-name-display"></strong>.
+      </p>
+      <p class="muted">
+        The first night alone. The first shrine to the false mother. The first champion sent
+        to bring you back &mdash; and the first soul the Inverse drinks down.
+      </p>
+    </section>
+
+    <section id="chapter" aria-labelledby="chapter-heading">
+      <h2 id="chapter-heading">The Road</h2>
+      <div id="chapter-viewport" role="region" aria-live="polite">
+        <div id="chapter-text">Loading&hellip;</div>
+        <div class="choices" id="chapter-choices"></div>
+        <div class="chapter-log" id="chapter-log" hidden></div>
+      </div>
+      <button class="btn" type="button" id="reset-chapter">Restart Chapter</button>
+    </section>
+
+  </main>
+
+  <!-- ============================================
+       ACHIEVEMENT TOAST
+       ============================================ -->
+  <div class="achievement-toast" id="achievement-toast" role="status" aria-live="polite">
+    <span class="badge" aria-hidden="true"></span>
+    <div class="meta">
+      <span class="label">Achievement Unlocked</span>
+      <span class="title" id="ach-title"></span>
+      <span class="desc" id="ach-desc"></span>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="interlude.html">Back to Interlude</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    let commanderName = "Unnamed Commander";
+
+    try {
+      const commander = JSON.parse(localStorage.getItem("hinomoto.commander") || "null");
+      if (commander && commander.name) {
+        commanderName = commander.name;
+        $("#commander-line").style.display = "";
+        $("#commander-name-display").textContent = commanderName;
+      }
+    } catch (e) {}
+
+    const ACHIEVEMENTS = {
+      chapter1_begin:    { title: "The Road East",         desc: "Begin Chapter I." },
+      chapter1_mercy:    { title: "The Bread He Gave",     desc: "Spare the shrine keeper." },
+      chapter1_kill:     { title: "The Shrine Keeper",     desc: "Take his soul." },
+      chapter1_champion: { title: "The First Champion",    desc: "Defeat him on the road." },
+      chapter1_complete: { title: "The Road Continues",    desc: "Complete Chapter I." }
+    };
+
+    function unlockAchievement(id) {
+      try {
+        const earned = JSON.parse(localStorage.getItem("hinomoto.achievements") || "{}");
+        if (earned[id]) return;
+        earned[id] = new Date().toISOString();
+        localStorage.setItem("hinomoto.achievements", JSON.stringify(earned));
+
+        const a = ACHIEVEMENTS[id];
+        if (a) {
+          const toast = $("#achievement-toast");
+          $("#ach-title").textContent = a.title;
+          $("#ach-desc").textContent = a.desc;
+          toast.classList.add("visible");
+          clearTimeout(window.__achTimer);
+          window.__achTimer = setTimeout(() => toast.classList.remove("visible"), 3500);
+        }
+      } catch (e) {}
+    }
+
+    function getUtsuhimeTier() {
+      const progress = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+      const chapter = progress.chapter || 0;
+      return Math.min(5, Math.max(2, chapter + 1));
+    }
+
+    const viewport   = $("#chapter-viewport");
+    const chapterText = $("#chapter-text");
+    const chapterChoices = $("#chapter-choices");
+    const chapterLog = $("#chapter-log");
+
+    function setText(html) { chapterText.innerHTML = html; }
+
+    function setState(state) {
+      viewport.classList.remove("road", "shrine", "combat");
+      if (state) viewport.classList.add(state);
+    }
+
+    function whisper(line) {
+      const tier = getUtsuhimeTier();
+      chapterText.innerHTML +=
+        `<span class="whisper-line whisper-tier-${tier}">( ${line} )</span>`;
+    }
+
+    function showChoices(buttons) {
+      chapterChoices.innerHTML = buttons
+        .map(b => `<button class="btn ${b.className || ''}" data-choice="${b.id}" type="button">${b.label}</button>`)
+        .join("");
+      bindChoices();
+    }
+
+    function clearChoices() { chapterChoices.innerHTML = ""; }
+
+    function bindChoices() {
+      $$("#chapter-choices .btn").forEach(btn => {
+        btn.addEventListener("click", () => handleChoice(btn.dataset.choice));
+      });
+    }
+
+    function log(html) {
+      chapterLog.hidden = false;
+      chapterLog.innerHTML = html;
+    }
+
+    function clearLog() {
+      chapterLog.hidden = true;
+      chapterLog.innerHTML = "";
+    }
+
+    function saveProgress(patch) {
+      try {
+        const existing = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+        localStorage.setItem("hinomoto.progress", JSON.stringify({
+          ...existing,
+          chapter: 1,
+          ...patch
+        }));
+      } catch (e) {}
+    }
+
+    function restartChapter() {
+      setState("road");
+      clearLog();
+      unlockAchievement("chapter1_begin");
+      saveProgress({ chapter1Started: true });
+
+      setText(
+        `You have been walking east for two days. The road is little more than a deer trail ` +
+        `through the pines &mdash; older than the Radiant Mother's faith, older than the ` +
+        `domains themselves. Your feet are raw. Your throat is dry. Your thoughts are ` +
+        `quieter than they should be. ` +
+        `<br><br>` +
+        `The Inverse has settled into your chest like a second heartbeat. It does not hurt. ` +
+        `It is just <em>there</em> &mdash; a cold, inverted pulse that keeps time with your own. ` +
+        `You have stopped trying to understand it. You are beginning to listen to it instead.`
+      );
+
+      whisper("cold. keep walking. the coast is where the sky opens.");
+
+      showChoices([
+        { id: "to_shrine", label: "Continue Along the Road", className: "inverse" }
+      ]);
+      log(`<strong>Chapter I begins.</strong> Two days east. The Inverse hums.`);
+    }
+
+    function sceneShrine() {
+      setState("shrine");
+      setText(
+        `By midday you come upon a shrine. Small. Modest. Not one of the great ones at Owari ` +
+        `&mdash; just a roadside altar where travelers stop to pray before the long pass. ` +
+        `<br><br>` +
+        `The symbol above the gate is hers. Golden halo encircling a single eye. Incense ` +
+        `curls from the altar inside. A shrine keeper sweeps the steps with a straw broom ` +
+        `&mdash; an old man, bent but not frail, with the calm of someone who has kept this ` +
+        `place for decades. ` +
+        `<br><br>` +
+        `He looks up at you as you approach. He smiles. ` +
+        `<br><br>` +
+        `<em>"Rest, traveler. You look like you have walked a long way."</em> ` +
+        `<br><br>` +
+        `You can feel the Inverse stir in your chest. His soul is right there. A small, ` +
+        `quiet, well-worn thing. It would be so easy.`
+      );
+
+      whisper("kill him. he was already hers. his soul is only food she has not eaten yet.");
+
+      showChoices([
+        { id: "spare", label: "Rest. Do Not Touch Him.",       className: "" },
+        { id: "kill",  label: "Take His Soul.",                className: "inverse" }
+      ]);
+      log(`<strong>The shrine keeper.</strong> He does not know what you are.`);
+    }
+
+    function sceneSpare() {
+      setState("shrine");
+      unlockAchievement("chapter1_mercy");
+
+      setText(
+        `You sit on the shrine steps. You do not speak. The keeper brings you water and a ` +
+        `piece of bread and does not ask you any questions. He seems to know, somehow, that ` +
+        `questions are the last thing you need. ` +
+        `<br><br>` +
+        `You eat. You drink. You watch the incense curl. You do not look at the golden eye ` +
+        `above the gate. ` +
+        `<br><br>` +
+        `After a long while, the keeper says: ` +
+        `<br><br>` +
+        `<em>"You are running from something."</em> ` +
+        `<br><br>` +
+        `You do not answer. ` +
+        `<br><br>` +
+        `<em>"That is fine. Everyone who comes here is running from something. I do not need ` +
+        `to know what."</em> ` +
+        `<br><br>` +
+        `He rises and returns to his sweeping. ` +
+        `<br><br>` +
+        `You leave the shrine an hour later, still whole, still human. You do not know why ` +
+        `you spared him. You do not know if it matters.`
+      );
+
+      whisper("you did not have to do that. you will have to kill many others. but not him. remember that you did not have to do it.");
+
+      showChoices([
+        { id: "to_champion", label: "Continue East", className: "inverse" }
+      ]);
+      log(`<strong>Mercy.</strong> The shrine keeper lives. You carry his bread with you.`);
+    }
+
+    function sceneKill() {
+      setState("combat");
+      unlockAchievement("chapter1_kill");
+      saveProgress({ chapter1SparedKeeper: false });
+
+      setText(
+        `You cross the courtyard before you can think about it. The keeper sees something ` +
+        `in your eyes and his smile falters. He does not run. He does not scream. He just ` +
+        `sets down the broom and closes his eyes. ` +
+        `<br><br>` +
+        `He knew. He must have known. Old shrine keepers always know. ` +
+        `<br><br>` +
+        `You kill him quickly. He does not suffer. That is the only mercy you have left ` +
+        `to give him. ` +
+        `<br><br>` +
+        `His soul lifts from his body. Not in gold &mdash; in <span class="ash-text">black ` +
+        `ash</span>. It curls inward, collapsing on itself, and then it turns to you. ` +
+        `It flows into your chest. ` +
+        `<br><br>` +
+        `The Inverse drinks it down. ` +
+        `<br><br>` +
+        `And for the first time, you feel something else alongside the cold. A whisper of ` +
+        `warmth. Deep inside. Not yours.`
+      );
+
+      whisper("yes. this is what we are. do not apologize. he would have died of old age in a few years anyway. you only took him early. he was going to be hers.");
+
+      showChoices([
+        { id: "to_champion", label: "Continue East", className: "inverse" }
+      ]);
+      log(`<strong>Kill.</strong> The shrine keeper's soul is yours.`);
+    }
+
+    function sceneChampion() {
+      setState("combat");
+      setText(
+        `The champion finds you at dusk, three miles past the shrine. ` +
+        `<br><br>` +
+        `He is on horseback. He wears the Radiant Mother's gold on his cloak. His blade is ` +
+        `drawn. His eyes are calm &mdash; not angry, not cruel. Just patient. The patience ` +
+        `of a man who has done this many times. ` +
+        `<br><br>` +
+        `<em>"The estate called for help before it burned. We found no survivors. We found ` +
+        `no bodies of the family. That means one of you is still alive."</em> ` +
+        `<br><br>` +
+        `He dismounts. He walks toward you. ` +
+        `<br><br>` +
+        `<em>"Come back with me. She will judge you. If you are worthy, she will bless you. ` +
+        `If you are not, she will let you go. That is the law."</em> ` +
+        `<br><br>` +
+        `He does not know she has already judged you. He does not know what you carry.`
+      );
+
+      whisper("let him strike first. let the world see what happens when she tries to harvest a hole.");
+
+      showChoices([
+        { id: "stand", label: "Stand Your Ground", className: "inverse" }
+      ]);
+      log(`<strong>The champion.</strong> He has been sent to bring you back.`);
+    }
+
+    function sceneStand() {
+      setState("combat");
+      setText(
+        `He swings first. Of course he does &mdash; you are a cursed thing, an anomaly, a ` +
+        `thing that should not exist. His blade comes down on your shoulder and stops. ` +
+        `<br><br>` +
+        `Not because you block it. Because the Inverse <em>drinks it</em>. ` +
+        `<br><br>` +
+        `The divine blessing on his blade &mdash; the golden sheen of the Radiant Mother's ` +
+        `light &mdash; dulls on contact. The steel that should have cut you cleanly instead ` +
+        `scrapes against your skin like a children's toy. ` +
+        `<br><br>` +
+        `His eyes widen. For the first time in his life, he is <em>afraid</em>. ` +
+        `<br><br>` +
+        `You take his blade out of his hand. You do not need to swing it. His soul has ` +
+        `already left him. He was not prepared to be <em>unmade</em>.` +
+        `<br><br>` +
+        `His soul turns <span class="ash-text">black like ash</span>. It curls into your ` +
+        `chest. The Inverse drinks it down. ` +
+        `<br><br>` +
+        `You feel the warmth again. Stronger this time. Something inside you is growing. ` +
+        `Something that has been waiting a long, long time.`
+      );
+
+      unlockAchievement("chapter1_champion");
+      saveProgress({ chapter1KilledChampion: true });
+
+      whisper("he was the first one who tried to bring you back to her. he will not be the last. each one you kill, i remember a little more. each one you kill, i am less broken.");
+
+      showChoices([
+        { id: "end", label: "Continue East", className: "inverse" }
+      ]);
+      log(`<strong>First champion.</strong> His soul is yours. Utsuhime grows stronger.`);
+    }
+
+    function sceneEnd() {
+      setState("road");
+      unlockAchievement("chapter1_complete");
+      saveProgress({
+        chapter1Complete: true,
+        chapter: 1
+      });
+
+      setText(
+        `You leave the body on the road. You do not take his blade &mdash; the blessing on ` +
+        `it would rot in your hand. You do not take his gold. You only take the road, still ` +
+        `pointing east, still pulling you toward the coast. ` +
+        `<br><br>` +
+        `The Inverse hums with every step. It feels different now. Fuller. The cold pulse ` +
+        `in your chest has a second rhythm underneath it &mdash; a whisper that is not your ` +
+        `own heartbeat, but beats alongside it. ` +
+        `<br><br>` +
+        `You do not know what you are becoming. ` +
+        `<br><br>` +
+        `You are beginning to suspect you are not becoming it <em>alone</em>.`
+      );
+
+      whisper("good. keep east. the shrine at owari is close. the next one who finds you will not be alone either. there will be more. there are always more.");
+
+      showChoices([
+        { id: "chapter2", label: "Continue to Chapter II", className: "inverse" }
+      ]);
+      log(`<strong>Chapter I complete.</strong> The road continues.`);
+    }
+
+    function handleChoice(choice) {
+      switch (choice) {
+        case "to_shrine":    return sceneShrine();
+        case "spare":        return sceneSpare();
+        case "kill":         return sceneKill();
+        case "to_champion":  return sceneChampion();
+        case "stand":        return sceneStand();
+        case "end":          return sceneEnd();
+        case "chapter2":     window.location.href = "chapter2.html"; return;
+        default:             return;
+      }
+    }
+
+    $("#reset-chapter").addEventListener("click", restartChapter);
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    restartChapter();
+  </script>
+</body>
+</html>

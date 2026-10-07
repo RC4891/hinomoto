@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Interlude – Chronicles of Hinomoto</title>
+  <meta name="description" content="Dawn after the fire. The road east begins. Utsuhime guides you toward Owari." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    #interlude-viewport {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.4);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.6s, box-shadow 0.6s, opacity 0.4s;
+    }
+
+    #interlude-viewport.dawn {
+      border-color: rgba(201, 169, 97, 0.5);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.15) inset, 0 0 20px rgba(201, 169, 97, 0.1);
+    }
+
+    #interlude-viewport.road {
+      border-color: rgba(165, 107, 255, 0.6);
+      box-shadow: 0 0 40px rgba(165, 107, 255, 0.25) inset, 0 0 24px rgba(165, 107, 255, 0.15);
+    }
+
+    #interlude-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--bone);
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .choices .btn { margin-top: 0; }
+
+    .interlude-log {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.2);
+      font-size: 0.85rem;
+      color: var(--ash);
+    }
+
+    .interlude-log strong { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .choices .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>The Interlude</h1>
+    <p class="tagline">Dawn After the Fire &mdash; The Road to Owari</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" class="current" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="interlude-intro">
+      <h2 id="interlude-intro">The Morning After</h2>
+      <p class="muted" id="commander-line" style="display:none;">
+        Commander on record: <strong id="commander-name-display"></strong>.
+      </p>
+      <p class="muted">
+        The prologue ends where the fire ends. The interlude begins at first light &mdash;
+        and ends at the first step of the road east.
+      </p>
+    </section>
+
+    <section id="viewport" aria-labelledby="viewport-heading">
+      <h2 id="viewport-heading">What Remains</h2>
+      <div id="interlude-viewport" role="region" aria-live="polite">
+        <div id="interlude-text"></div>
+        <div class="choices" id="interlude-choices"></div>
+        <div class="interlude-log" id="interlude-log" hidden></div>
+      </div>
+      <button class="btn" type="button" id="reset-interlude">Restart Interlude</button>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="prologue.html">Back to Prologue</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    /* ---------- LOAD COMMANDER ---------- */
+    let commanderName = "Unnamed Commander";
+
+    try {
+      const commander = JSON.parse(localStorage.getItem("hinomoto.commander") || "null");
+      if (commander && commander.name) {
+        commanderName = commander.name;
+        $("#commander-line").style.display = "";
+        $("#commander-name-display").textContent = commanderName;
+      }
+    } catch (e) {}
+
+    /* ---------- ENGINE ---------- */
+    const viewport        = $("#interlude-viewport");
+    const interludeText   = $("#interlude-text");
+    const interludeChoices = $("#interlude-choices");
+    const interludeLog    = $("#interlude-log");
+
+    function setText(html) { interludeText.innerHTML = html; }
+
+    function setState(state) {
+      viewport.classList.remove("dawn", "road");
+      if (state) viewport.classList.add(state);
+    }
+
+    function whisper(line) {
+      interludeText.innerHTML += `<span class="whisper-line whisper-tier-1">( ${line} )</span>`;
+    }
+
+    function showChoices(buttons) {
+      interludeChoices.innerHTML = buttons
+        .map(b => `<button class="btn ${b.className || ''}" data-choice="${b.id}" type="button">${b.label}</button>`)
+        .join("");
+      bindChoices();
+    }
+
+    function clearChoices() { interludeChoices.innerHTML = ""; }
+
+    function bindChoices() {
+      $$("#interlude-choices .btn").forEach(btn => {
+        btn.addEventListener("click", () => handleChoice(btn.dataset.choice));
+      });
+    }
+
+    function log(html) {
+      interludeLog.hidden = false;
+      interludeLog.innerHTML = html;
+    }
+
+    function clearLog() {
+      interludeLog.hidden = true;
+      interludeLog.innerHTML = "";
+    }
+
+    /* ---------- SCENES ---------- */
+    function restartInterlude() {
+      setState("dawn");
+      clearLog();
+      setText(
+        `You wake at dawn on the ridge above the estate. Your body aches &mdash; not from ` +
+        `the fighting, but from something deeper. Something inside you hums like a plucked ` +
+        `string. The Inverse. ` +
+        `<br><br>` +
+        `Below you, the ruin. The black skeleton of your home. Smoke still climbing in thin ` +
+        `columns against a pale sky. No screams. No shouts. No one left to scream. ` +
+        `<br><br>` +
+        `You are the last of your clan. ` +
+        `<br><br>` +
+        `You look east, toward the coast. You do not know why. You have never been to Owari. ` +
+        `But something is pulling you there. Something older than your grief.`
+      );
+      whisper("east. the sky opens where the sun touches the sea. she is there.");
+      showChoices([
+        { id: "stand", label: "Rise and Walk East", className: "inverse" }
+      ]);
+      log(`<strong>Dawn.</strong> The estate is ash. The road east begins.`);
+    }
+
+    function sceneStand() {
+      setState("road");
+      setText(
+        `You stand. Your legs are unsteady, but they hold. ` +
+        `<br><br>` +
+        `You do not descend to the ruin. You do not bury the dead. You do not say the old ` +
+        `words over the bodies. You do not know if that makes you a coward or something else. ` +
+        `You only know that standing still is worse. ` +
+        `<br><br>` +
+        `You turn east. The road out of the valley is narrow and overgrown. It will take ` +
+        `you through the pines, down to the river, and eventually to the coast. ` +
+        `<br><br>` +
+        `The Inverse hums a little louder with every step you take.`
+      );
+      whisper("do not stop at the river. do not stop at the shrine. the men who wear her light are already looking for you.");
+      showChoices([
+        { id: "walk", label: "Keep Walking", className: "inverse" }
+      ]);
+      log(`<strong>Road chosen:</strong> East. The hunt begins.`);
+    }
+
+    function sceneWalk() {
+      setState("road");
+      setText(
+        `You walk until the sun is high. You walk until the smoke behind you is only a ` +
+        `smudge on the horizon. You walk until your feet bleed and your vision blurs and ` +
+        `the Inverse has settled into a rhythm like a second heartbeat. ` +
+        `<br><br>` +
+        `At midday, you stop to drink from a stream. You catch your reflection in the water ` +
+        `and do not recognize the face looking back. It is yours. It has always been yours. ` +
+        `But there is something behind the eyes now that was not there yesterday. ` +
+        `<br><br>` +
+        `You do not know what you are becoming. You only know it is not something the ` +
+        `Radiant Mother will be able to stop.`
+      );
+      whisper("good. keep going. you are not the first she has cast aside. you are only the first to survive it.");
+      showChoices([
+        { id: "chapter1", label: "Continue to Chapter I", className: "inverse" }
+      ]);
+      log(`<strong>Interlude complete.</strong> Chapter I awaits on the road.`);
+    }
+
+    /* ---------- HANDLER ---------- */
+    function handleChoice(choice) {
+      switch (choice) {
+        case "stand":    return sceneStand();
+        case "walk":     return sceneWalk();
+        case "chapter1": window.location.href = "chapter1.html"; return;
+        default:         return;
+      }
+    }
+
+    $("#reset-interlude").addEventListener("click", restartInterlude);
+
+    /* ---------- DROPDOWN TOGGLE ---------- */
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    restartInterlude();
+  </script>
+</body>
+</html>

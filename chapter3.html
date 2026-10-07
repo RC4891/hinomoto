@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter III – The Village of Salt | Chronicles of Hinomoto</title>
+  <meta name="description" content="Chapter III: The Village of Salt. An old priest senses something wrong. A second champion arrives." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    #chapter-viewport {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.4);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.6s, box-shadow 0.6s, opacity 0.4s;
+    }
+
+    #chapter-viewport.road {
+      border-color: rgba(165, 107, 255, 0.55);
+      box-shadow: 0 0 30px rgba(165, 107, 255, 0.2) inset, 0 0 20px rgba(165, 107, 255, 0.12);
+    }
+
+    #chapter-viewport.village {
+      border-color: rgba(232, 225, 213, 0.4);
+      box-shadow: 0 0 30px rgba(232, 225, 213, 0.12) inset;
+    }
+
+    #chapter-viewport.priest {
+      border-color: rgba(184, 166, 204, 0.55);
+      box-shadow: 0 0 30px rgba(184, 166, 204, 0.2) inset;
+    }
+
+    #chapter-viewport.combat {
+      border-color: rgba(165, 107, 255, 0.85);
+      box-shadow: 0 0 40px rgba(165, 107, 255, 0.35) inset, 0 0 24px rgba(165, 107, 255, 0.25);
+    }
+
+    #chapter-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--bone);
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .choices .btn { margin-top: 0; }
+
+    .chapter-log {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(201, 169, 97, 0.2);
+      font-size: 0.85rem;
+      color: var(--ash);
+    }
+
+    .chapter-log strong { color: var(--gold); }
+
+    /* ---------- ACHIEVEMENT TOAST ---------- */
+    .achievement-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      z-index: 200;
+      background: linear-gradient(180deg, #1a1312, #0a0708);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      box-shadow: 0 0 30px rgba(201, 169, 97, 0.4);
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      max-width: 340px;
+      transform: translateY(180%);
+      transition: transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .achievement-toast.visible { transform: translateY(0); }
+
+    .achievement-toast .badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--gold), rgba(201, 169, 97, 0.15));
+      flex-shrink: 0;
+      box-shadow: 0 0 12px rgba(201, 169, 97, 0.7);
+    }
+
+    .achievement-toast .meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .achievement-toast .label {
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .achievement-toast .title {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      color: var(--bone);
+    }
+
+    .achievement-toast .desc {
+      font-size: 0.75rem;
+      color: var(--ash);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .choices .btn { width: 100%; }
+      .achievement-toast { left: 0.75rem; right: 0.75rem; bottom: 0.75rem; max-width: none; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Chapter III</h1>
+    <p class="tagline">The Village of Salt</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" class="current" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <section aria-labelledby="chapter-intro">
+      <h2 id="chapter-intro">The Village of Salt</h2>
+      <p class="muted" id="commander-line" style="display:none;">
+        Commander on record: <strong id="commander-name-display"></strong>.
+      </p>
+      <p class="muted">
+        A coastal village caught between two faiths. An old priest who senses something wrong.
+        A second champion of the Radiant Mother &mdash; and a choice that will follow you for
+        the rest of the road.
+      </p>
+    </section>
+
+    <section id="chapter" aria-labelledby="chapter-heading">
+      <h2 id="chapter-heading">Salt on the Wind</h2>
+      <div id="chapter-viewport" role="region" aria-live="polite">
+        <div id="chapter-text">Loading&hellip;</div>
+        <div class="choices" id="chapter-choices"></div>
+        <div class="chapter-log" id="chapter-log" hidden></div>
+      </div>
+      <button class="btn" type="button" id="reset-chapter">Restart Chapter</button>
+    </section>
+
+  </main>
+
+  <div class="achievement-toast" id="achievement-toast" role="status" aria-live="polite">
+    <span class="badge" aria-hidden="true"></span>
+    <div class="meta">
+      <span class="label">Achievement Unlocked</span>
+      <span class="title" id="ach-title"></span>
+      <span class="desc" id="ach-desc"></span>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="chapter2.html">Back to Chapter II</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    let commanderName = "Unnamed Commander";
+
+    try {
+      const commander = JSON.parse(localStorage.getItem("hinomoto.commander") || "null");
+      if (commander && commander.name) {
+        commanderName = commander.name;
+        $("#commander-line").style.display = "";
+        $("#commander-name-display").textContent = commanderName;
+      }
+    } catch (e) {}
+
+    const ACHIEVEMENTS = {
+      chapter3_begin:    { title: "The Village of Salt",   desc: "Reach the coastal village." },
+      chapter3_reveal:   { title: "The Blessing Burns",    desc: "Let the priest see what you are." },
+      chapter3_conceal:  { title: "The Quiet Guest",       desc: "Hide your nature from the priest." },
+      chapter3_champion: { title: "The Second Champion",   desc: "Face her on the shore." },
+      chapter3_complete: { title: "Salt on the Wind",      desc: "Complete Chapter III." }
+    };
+
+    function unlockAchievement(id) {
+      try {
+        const earned = JSON.parse(localStorage.getItem("hinomoto.achievements") || "{}");
+        if (earned[id]) return;
+        earned[id] = new Date().toISOString();
+        localStorage.setItem("hinomoto.achievements", JSON.stringify(earned));
+
+        const a = ACHIEVEMENTS[id];
+        if (a) {
+          const toast = $("#achievement-toast");
+          $("#ach-title").textContent = a.title;
+          $("#ach-desc").textContent = a.desc;
+          toast.classList.add("visible");
+          clearTimeout(window.__achTimer);
+          window.__achTimer = setTimeout(() => toast.classList.remove("visible"), 3500);
+        }
+      } catch (e) {}
+    }
+
+    function getUtsuhimeTier() {
+      const progress = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+      const chapter = progress.chapter || 0;
+      return Math.min(5, Math.max(3, chapter + 1));
+    }
+
+    const viewport   = $("#chapter-viewport");
+    const chapterText = $("#chapter-text");
+    const chapterChoices = $("#chapter-choices");
+    const chapterLog = $("#chapter-log");
+
+    function setText(html) { chapterText.innerHTML = html; }
+
+    function setState(state) {
+      viewport.classList.remove("road", "village", "priest", "combat");
+      if (state) viewport.classList.add(state);
+    }
+
+    function whisper(line) {
+      const tier = getUtsuhimeTier();
+      chapterText.innerHTML +=
+        `<span class="whisper-line whisper-tier-${tier}">( ${line} )</span>`;
+    }
+
+    function showChoices(buttons) {
+      chapterChoices.innerHTML = buttons
+        .map(b => `<button class="btn ${b.className || ''}" data-choice="${b.id}" type="button">${b.label}</button>`)
+        .join("");
+      bindChoices();
+    }
+
+    function clearChoices() { chapterChoices.innerHTML = ""; }
+
+    function bindChoices() {
+      $$("#chapter-choices .btn").forEach(btn => {
+        btn.addEventListener("click", () => handleChoice(btn.dataset.choice));
+      });
+    }
+
+    function log(html) {
+      chapterLog.hidden = false;
+      chapterLog.innerHTML = html;
+    }
+
+    function clearLog() {
+      chapterLog.hidden = true;
+      chapterLog.innerHTML = "";
+    }
+
+    function saveProgress(patch) {
+      try {
+        const existing = JSON.parse(localStorage.getItem("hinomoto.progress") || "{}");
+        localStorage.setItem("hinomoto.progress", JSON.stringify({
+          ...existing,
+          chapter: 3,
+          ...patch
+        }));
+      } catch (e) {}
+    }
+
+    function restartChapter() {
+      setState("road");
+      clearLog();
+      unlockAchievement("chapter3_begin");
+      saveProgress({ chapter3Started: true });
+
+      setText(
+        `The coast is close now. You can smell it &mdash; salt on the wind, the low tide ` +
+        `rot of seaweed and fish. The pines have given way to scrub and stone. The road ` +
+        `has widened into something you could almost call a path. ` +
+        `<br><br>` +
+        `You walk until dusk. The Inverse has been quiet all day &mdash; not silent, but ` +
+        `settled. Patient. Like a wolf that knows its prey is close. ` +
+        `<br><br>` +
+        `The prayer cord Utsuhime gave you at the shrine is warm against your wrist. ` +
+        `You have not taken it off.`
+      );
+
+      whisper("we are close now. i can smell her on the wind. she has not had a challenger in a very long time. she will be curious.");
+
+      showChoices([
+        { id: "to_village", label: "Continue Toward the Coast", className: "inverse" }
+      ]);
+      log(`<strong>Chapter III begins.</strong> The coast is close.`);
+    }
+
+    function sceneVillage() {
+      setState("village");
+      setText(
+        `The village appears an hour after sunset. A cluster of low houses clinging to a ` +
+        `narrow bay, roofs shingled with driftwood and canvas, boats pulled up on the shore ` +
+        `for the night. Fires flicker in windows. Somewhere, someone is singing. ` +
+        `<br><br>` +
+        `At the center of the village, on the highest point of the shore, stands a shrine. ` +
+        `Small. Modest. But well-kept &mdash; freshly painted, the golden eye above its gate ` +
+        `polished so bright it catches even the moonlight. ` +
+        `<br><br>` +
+        `You stop at the edge of the village. You do not know if you are welcome here. You ` +
+        `do not know if you should be seen.`
+      );
+
+      whisper("do not go to the shrine. do not kneel. do not let them bless you. the men who bless for her are the ones who watch for her.");
+
+      showChoices([
+        { id: "enter", label: "Walk Into the Village", className: "inverse" }
+      ]);
+      log(`<strong>The village.</strong> Poor. Coastal. Watched.`);
+    }
+
+    function sceneEnter() {
+      setState("priest");
+      setText(
+        `You are halfway across the village square when a voice stops you. ` +
+        `<br><br>` +
+        `<em>"Traveler."</em> ` +
+        `<br><br>` +
+        `An old priest. White robes, threadbare but clean. A small golden eye pendant at ` +
+        `his throat. He stands in the doorway of a small house beside the shrine &mdash; ` +
+        `not the shrine itself, but the priest's house. His eyes are milky with age, but ` +
+        `they are not blind. They fix on you with an interest that makes your skin prickle. ` +
+        `<br><br>` +
+        `<em>"You have walked a long way. Rest here tonight. The shrine has beds for ` +
+        `travelers."</em> ` +
+        `<br><br>` +
+        `The Inverse stirs in your chest. You can feel the priest's soul &mdash; quiet, ` +
+        `patient, well-worn. Nothing like the champion's. But there is something behind his ` +
+        `eyes that is <em>watching</em>. Not staring. Just watching.`
+      );
+
+      whisper("careful. he is old. old priests see things the young ones cannot. do not let him touch you.");
+
+      showChoices([
+        { id: "reveal", label: "Reveal Yourself. Let Him See.", className: "inverse" },
+        { id: "conceal", label: "Conceal Yourself. Stay Silent.", className: "" }
+      ]);
+      log(`<strong>The priest.</strong> He is watching you.`);
+    }
+
+    function sceneReveal() {
+      setState("priest");
+      unlockAchievement("chapter3_reveal");
+      saveProgress({ chapter3Revealed: true });
+
+      setText(
+        `You do not hide. You do not lower your eyes. You walk forward until you are ` +
+        `standing in front of him, and you let the Inverse hum a little louder. ` +
+        `<br><br>` +
+        `You watch his face as it happens. First confusion. Then recognition. Then ` +
+        `<em>fear</em>. ` +
+        `<br><br>` +
+        `He steps back. His hand rises to the pendant at his throat. ` +
+        `<br><br>` +
+        `<em>"You are..."</em> he starts. <em>"You are one of hers. One of the cursed. I have ` +
+        `read about you. I did not think..."</em> ` +
+        `<br><br>` +
+        `He swallows. His voice steadies. ` +
+        `<br><br>` +
+        `<em>"I have been a priest of the Radiant Mother for forty-two years. I have never ` +
+        `met one of the cursed. I have never met anyone she has rejected."</em> ` +
+        `<br><br>` +
+        `He looks at you the way a scholar looks at a text he has spent his life trying to ` +
+        `find. Not with hatred. With <em>curiosity</em>. ` +
+        `<br><br>` +
+        `<em>"Come inside. Please. I do not wish you harm."</em>`
+      );
+
+      whisper("he is not what i expected. he is afraid of her, not of you. be careful. that kind of man can help you, or he can get you killed.");
+
+      showChoices([
+        { id: "priest_dinner", label: "Enter the Priest's House", className: "inverse" }
+      ]);
+      log(`<strong>Revealed.</strong> The priest knows what you are.`);
+    }
+
+    function sceneConceal() {
+      setState("priest");
+      unlockAchievement("chapter3_conceal");
+      saveProgress({ chapter3Revealed: false });
+
+      setText(
+        `You do not answer him. You do not let the Inverse rise. You let your face stay ` +
+        `neutral, your body stay loose, your eyes stay flat. ` +
+        `<br><br>` +
+        `You have been doing this since the estate. You have learned how to hide. ` +
+        `<br><br>` +
+        `<em>"I will rest,"</em> you say. <em>"Thank you."</em> ` +
+        `<br><br>` +
+        `The priest studies you for one long breath. Then two. Then he nods, slowly. ` +
+        `<br><br>` +
+        `<em>"Of course. This way."</em> ` +
+        `<br><br>` +
+        `He turns and walks into the house. You follow him. You do not know if he believed ` +
+        `you. You do not know if it matters. But you are inside, and you are warm, and for ` +
+        `one night, at least, no one is trying to kill you.`
+      );
+
+      whisper("good. he sees something, but he does not see me. keep it that way. the longer she cannot see you, the longer you have to reach her.");
+
+      showChoices([
+        { id: "priest_dinner", label: "Enter the Priest's House", className: "inverse" }
+      ]);
+      log(`<strong>Concealed.</strong> You stayed silent.`);
+    }
+
+    function sceneDinner() {
+      setState("priest");
+      setText(
+        `His house is small. One room, a hearth, a low table. He makes you tea and sets ` +
+        `out a bowl of rice and salted fish. He does not eat with you. He sits across the ` +
+        `table and watches. ` +
+        `<br><br>` +
+        `<em>"I was stationed here when I was young,"</em> he says. <em>"I was supposed to ` +
+        `move on years ago. To a bigger shrine. To more important work. But I stayed. I ` +
+        `like it here. The people are kind. The sea is honest."</em> ` +
+        `<br><br>` +
+        `He takes a sip of his tea. ` +
+        `<br><br>` +
+        `<em>"And I have been waiting."</em> ` +
+        `<br><br>` +
+        `<em>"Waiting for what?"</em> you ask. ` +
+        `<br><br>` +
+        `<em>"For someone like you."</em> ` +
+        `<br><br>` +
+        `He sets the cup down. His eyes are very steady. ` +
+        `<br><br>` +
+        `<em>"There is a record, in the back of the shrine. Older than the Radiant Mother's ` +
+        `faith. The priests of Owari do not know I have it. It speaks of a time before her ` +
+        `arrival. It speaks of another goddess. And it speaks of her children &mdash; souls ` +
+        `she has touched, souls her rival could not consume."</em> ` +
+        `<br><br>` +
+        `<em>"It speaks of the Inverse."</em>`
+      );
+
+      whisper("he knows. not everything, but he knows. this is the first mortal to speak of me in ten thousand years. be careful with him. and be kind. he is the only ally you may find in this village.");
+
+      showChoices([
+        { id: "ask_record", label: "Ask to See the Record", className: "inverse" }
+      ]);
+      log(`<strong>The record.</strong> There is something older than the faith.`);
+    }
+
+    function sceneRecord() {
+      setState("priest");
+      setText(
+        `He leads you through the shrine to a small back room. There is a chest there, ` +
+        `chained shut. He unlocks it with a key he wears around his neck. ` +
+        `<br><br>` +
+        `Inside, wrapped in oilcloth, is a scroll. Old. Older than anything you have ever ` +
+        `seen. The script on it is not Japanese, not modern, not anything you can read. ` +
+        `But there is a symbol at the top of it. ` +
+        `<br><br>` +
+        `A crescent. Waning. Alone in the dark. ` +
+        `<br><br>` +
+        `The same symbol you saw carved above the shrine on the road. ` +
+        `<br><br>` +
+        `<em>"I cannot read it,"</em> the priest says. <em>"I have tried. Scholars have ` +
+        `tried. It is written in a language that does not exist anymore."</em> ` +
+        `<br><br>` +
+        `You touch the scroll. ` +
+        `<br><br>` +
+        `And the Inverse <em>lights up</em>. Not cold this time. Not hungry. ` +
+        `<em>Recognizing</em>. Like a hand reaching back to squeeze another hand. ` +
+        `<br><br>` +
+        `The scroll is warm in your fingers. ` +
+        `<br><br>` +
+        `<em>"You can read it,"</em> the priest whispers. He sounds almost afraid to hope. ` +
+        `<br><br>` +
+        `<em>"You are the first person in a thousand years who can read it."</em>`
+      );
+
+      whisper("this is a piece of me. a fragment. someone wrote this down when i was still able to be written about. take it. keep it. we will need it.");
+
+      showChoices([
+        { id: "take_scroll", label: "Take the Scroll", className: "inverse" }
+      ]);
+      log(`<strong>The scroll.</strong> It is written in her language. You can read it.`);
+      saveProgress({ hasScroll: true });
+    }
+
+    function sceneTakeScroll() {
+      setState("combat");
+      setText(
+        `You wrap the scroll in your cloak and tuck it against your chest. The priest ` +
+        `watches you do it. He does not try to stop you. ` +
+        `<br><br>` +
+        `<em>"Take it,"</em> he says. <em>"It was never meant for me. It was waiting for ` +
+        `someone who could understand it."</em> ` +
+        `<br><br>` +
+        `He opens his mouth to say something else &mdash; and then the bells begin to ring. ` +
+        `<br><br>` +
+        `Not the shrine bells. The village bells. The alarm. ` +
+        `<br><br>` +
+        `Outside, someone is shouting. You hear hooves on stone. You hear a voice you have ` +
+        `heard before &mdash; the voice of a champion. ` +
+        `<br><br>` +
+        `<em>"Where is the cursed one? Where is the one who unmade my brother in the pass?"</em> ` +
+        `<br><br>` +
+        `The priest goes pale. ` +
+        `<br><br>` +
+        `<em>"Go,"</em> he says. <em>"Out the back. The alley leads to the shore. Do not let ` +
+        `her see me helping you. She will burn the village."</em>`
+      );
+
+      whisper("go. the alley. do not fight her in the open. let her chase you to the water. the sea is mine. she cannot see me in the dark.");
+
+      showChoices([
+        { id: "alley", label: "Slip Out the Back", className: "inverse" }
+      ]);
+      log(`<strong>The second champion.</strong> She has found you.`);
+    }
+
+    function sceneAlley() {
+      setState("combat");
+      setText(
+        `You slip out the back of the priest's house and into the alley. It is narrow, ` +
+        `cold, and pitch black. You can hear the champion behind you &mdash; not the same ` +
+        `one who found you on the road, but close. A sister. Or a student. Or something ` +
+        `worse. ` +
+        `<br><br>` +
+        `<em>"I can smell you,"</em> she calls. <em>"You carry something that stinks of ` +
+        `the old sky. She told me. She told all of us about you."</em> ` +
+        `<br><br>` +
+        `You do not stop. You follow the alley to the end, out onto the shore. The tide is ` +
+        `low. The moon is behind clouds. ` +
+        `<br><br>` +
+        `You turn to face her. ` +
+        `<br><br>` +
+        `She is not what you expected. She is younger than the first champion &mdash; ` +
+        `nineteen, maybe twenty. Her armor is too big for her. Her blade is too heavy. ` +
+        `She carries the Radiant Mother's blessing like a child carrying a bowl of water ` +
+        `they are afraid to spill. ` +
+        `<br><br>` +
+        `<em>"You killed my brother,"</em> she says. ` +
+        `<br><br>` +
+        `The Inverse hums. ` +
+        `<br><br>` +
+        `She is <em>afraid</em> of you. She has been sent to die.`
+      );
+
+      whisper("she is a child. she does not know what she carries. kill her if you must. but do not enjoy it. do not become what we are hunting.");
+
+      showChoices([
+        { id: "stand", label: "Face Her", className: "inverse" }
+      ]);
+      log(`<strong>The shore.</strong> The second champion stands before you.`);
+    }
+
+    function sceneStand() {
+      setState("combat");
+      setText(
+        `She swings first. It is a good swing &mdash; clean, fast, the kind of swing that ` +
+        `takes years of training. But her blade is blessed, and the blessing dulls against ` +
+        `the Inverse before it ever reaches you. ` +
+        `<br><br>` +
+        `The steel passes through the air an inch from your shoulder. You do not flinch. ` +
+        `<br><br>` +
+        `She stumbles. She was not ready for that. She was ready to fight a monster, not ` +
+        `something that <em>eats her blessing mid-swing</em>. ` +
+        `<br><br>` +
+        `She tries again. Same thing. Her blade grows dimmer with every strike. ` +
+        `<br><br>` +
+        `On the third swing, the blessing on her steel gutters out entirely. ` +
+        `<br><br>` +
+        `She drops the blade. Not because she wants to. Because it has become too heavy ` +
+        `to hold. ` +
+        `<br><br>` +
+        `She looks at you. Her eyes are wet. She is nineteen years old. She has never ` +
+        `killed anyone. She has never lost a fight. She was told this would be easy. ` +
+        `<br><br>` +
+        `<em>"Please,"</em> she whispers. ` +
+        `<br><br>` +
+        `The Inverse is <em>loud</em> in your chest. It is not hungry. It is <em>grieving</em>. ` +
+        `It has been waiting for this moment for a very long time. ` +
+        `<br><br>` +
+        `You make your choice.`
+      );
+
+      whisper("remember: she is not her. she is not the one who cursed you. if you kill her, kill her clean. if you spare her, spare her whole. do not leave her half-alive in the dark.");
+
+      showChoices([
+        { id: "end_it", label: "End It. Take Her Soul.",  className: "inverse" },
+        { id: "spare_2", label: "Let Her Go.",             className: "" }
+      ]);
+      log(`<strong>Her blade is dark.</strong> She cannot fight you. Choose.`);
+    }
+
+    function sceneEndIt() {
+      setState("combat");
+      unlockAchievement("chapter3_champion");
+      saveProgress({ chapter3SparedChampion: false });
+
+      setText(
+        `You take her soul. It is quick. She does not suffer. ` +
+        `<br><br>` +
+        `The black ash curls into your chest. The Inverse drinks it down. ` +
+        `<br><br>` +
+        `And this time, something else happens. ` +
+        `<br><br>` +
+        `You hear <em>her</em> &mdash; not Utsuhime, but the girl, just for a moment, ` +
+        `just before she goes. ` +
+        `<br><br>` +
+        `<em>"He was my brother. He was all I had. I only wanted to bring you back."</em> ` +
+        `<br><br>` +
+        `And then she is gone. ` +
+        `<br><br>` +
+        `You stand on the shore for a long time. The tide comes in. The moon moves. ` +
+        `The Inverse hums, quietly, and does not gloat.`
+      );
+
+      whisper("i am sorry. i did not want you to hear her. sometimes the souls speak. sometimes they curse you. sometimes they thank you. you learn to carry them either way.");
+
+      showChoices([
+        { id: "end_ch3", label: "Leave the Shore", className: "inverse" }
+      ]);
+      log(`<strong>Kill.</strong> Two champions have fallen. The road continues.`);
+    }
+
+    function sceneSpare2() {
+      setState("combat");
+      unlockAchievement("chapter3_champion");
+      saveProgress({ chapter3SparedChampion: true });
+
+      setText(
+        `You do not take her soul. ` +
+        `<br><br>` +
+        `You step back. You lower your hand. You let the Inverse settle, quiet and cold, ` +
+        `and you look at her the way a person looks at another person. ` +
+        `<br><br>` +
+        `<em>"Go home,"</em> you say. ` +
+        `<br><br>` +
+        `She stares at you. She does not understand. She was told you were a monster. She ` +
+        `was told you would eat her. ` +
+        `<br><br>` +
+        `<em>"Why?"</em> she asks. ` +
+        `<br><br>` +
+        `<em>"Because your brother did not deserve to die,"</em> you say. <em>"And because ` +
+        `I am not what she made me."</em> ` +
+        `<br><br>` +
+        `She does not move for a long time. Then she picks up her dark blade, turns, and ` +
+        `walks back toward the village. She does not look back. ` +
+        `<br><br>` +
+        `You watch her go. You do not know if you made a mistake. You do not know if she ` +
+        `will tell the Radiant Mother where you are. You only know that the Inverse is ` +
+        `quieter than it has been in days &mdash; and that for the first time since the ` +
+        `estate, you do not feel entirely alone in your own body.`
+      );
+
+      whisper("you did not have to do that. she will remember it. one day, when she is older, she will understand what you gave her. thank you.");
+
+      showChoices([
+        { id: "end_ch3", label: "Leave the Shore", className: "inverse" }
+      ]);
+      log(`<strong>Spare.</strong> The second champion lives.`);
+    }
+
+    function sceneEndCh3() {
+      setState("road");
+      unlockAchievement("chapter3_complete");
+      saveProgress({
+        chapter3Complete: true,
+        chapter: 3
+      });
+
+      setText(
+        `You leave the village behind. You do not go back through it &mdash; you follow ` +
+        `the shore instead, the long way around the bay, away from the shrine and the ` +
+        `bells and the priest's kind eyes. ` +
+        `<br><br>` +
+        `You have the scroll. You have the cord. You have the Inverse, still humming in ` +
+        `your chest like a second heartbeat. ` +
+        `<br><br>` +
+        `Behind you, the village burns nothing. The champion &mdash; alive or dead &mdash; ` +
+        `is behind you now. The priest is behind you. The road, and the shrine, and the ` +
+        `soldiers who killed your clan are all behind you. ` +
+        `<br><br>` +
+        `Ahead of you, far up the coast, the shape of Owari is beginning to rise on the ` +
+        `horizon. The oldest shrine. The seat of her power. ` +
+        `<br><br>` +
+        `You will be there in three days. Maybe two if you walk through the night. ` +
+        `<br><br>` +
+        `Utsuhime is quiet. You can feel her in your chest, listening. Waiting. ` +
+        `Not afraid. Not eager. Just <em>present</em>, in a way she has not been before. ` +
+        `<br><br>` +
+        `You are beginning to understand what she is. ` +
+        `<br><br>` +
+        `You are beginning to understand what you are becoming.`
+      );
+
+      whisper("we are almost there. not the shrine. the end of the road. you will know when you see it. i have waited ten thousand years for this. i can wait a few more days.");
+
+      showChoices([
+        { id: "chapter4", label: "Continue to Chapter IV", className: "inverse" }
+      ]);
+      log(`<strong>Chapter III complete.</strong> Owari is close.`);
+    }
+
+    function handleChoice(choice) {
+      switch (choice) {
+        case "to_village":    return sceneVillage();
+        case "enter":         return sceneEnter();
+        case "reveal":        return sceneReveal();
+        case "conceal":       return sceneConceal();
+        case "priest_dinner": return sceneDinner();
+        case "ask_record":    return sceneRecord();
+        case "take_scroll":   return sceneTakeScroll();
+        case "alley":         return sceneAlley();
+        case "stand":         return sceneStand();
+        case "end_it":        return sceneEndIt();
+        case "spare_2":       return sceneSpare2();
+        case "end_ch3":       return sceneEndCh3();
+        case "chapter4":      window.location.href = "chapter4.html"; return;
+        default:              return;
+      }
+    }
+
+    $("#reset-chapter").addEventListener("click", restartChapter);
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    restartChapter();
+  </script>
+</body>
+</html>

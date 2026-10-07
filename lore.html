@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lore of Hinomoto – The Radiant Mother & Utsuhime</title>
+  <meta name="description" content="The truth of the Radiant Mother and Utsuhime, the Hollow Princess. Five chapters. One hunt. The road to Owari." />
+
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* ---------- PAGE-SPECIFIC: VIDEO BANNER ---------- */
+    .banner {
+      width: 100%;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(193, 68, 14, 0.3);
+      background: #000;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .banner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ---------- PAGE-SPECIFIC: MUTE TOGGLE ---------- */
+    .mute-toggle {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 5;
+      margin: 0;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      background: rgba(10, 7, 8, 0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--ember);
+      color: var(--bone);
+    }
+
+    .mute-toggle:hover,
+    .mute-toggle:focus {
+      background: rgba(193, 68, 14, 0.35);
+      box-shadow: 0 0 14px rgba(193, 68, 14, 0.5);
+    }
+
+    .mute-toggle[aria-pressed="false"] {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* ---------- PAGE-SPECIFIC: SCRIPTURE CALLOUT ---------- */
+    .scripture {
+      background: var(--bg-void);
+      border-left: 3px solid var(--inverse);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-style: italic;
+      color: var(--bone);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    .scripture::before {
+      content: "\201C";
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--inverse-glow);
+      line-height: 0;
+      vertical-align: -0.4rem;
+      margin-right: 0.25rem;
+    }
+
+    .scripture cite {
+      display: block;
+      margin-top: 0.6rem;
+      font-style: normal;
+      font-size: 0.8rem;
+      color: var(--ash);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- PAGE-SPECIFIC: WHISPER CALLOUT ---------- */
+    .whisper {
+      background: rgba(138, 129, 124, 0.06);
+      border-left: 3px solid var(--ash);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-style: italic;
+      color: var(--ash);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.95rem;
+    }
+
+    .whisper::before { content: "( "; color: var(--ash); opacity: 0.6; }
+    .whisper::after  { content: " )"; color: var(--ash); opacity: 0.6; }
+
+    .whisper cite {
+      display: block;
+      margin-top: 0.6rem;
+      font-style: normal;
+      font-size: 0.8rem;
+      color: var(--ash);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* ---------- PAGE-SPECIFIC: DOMAIN GRID ---------- */
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .domain-card {
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+
+    .domain-card h4 {
+      font-family: var(--font-display);
+      color: var(--gold);
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+
+    .domain-card p { font-size: 0.88rem; color: var(--ash); margin: 0; }
+
+    /* ---------- PAGE-SPECIFIC: CHAPTER LIST ---------- */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .chapter-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      background: var(--bg-void);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-left: 3px solid var(--ember);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.15s;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .chapter-card:hover,
+    .chapter-card:focus {
+      border-left-color: var(--ember-glow);
+      box-shadow: 0 0 20px rgba(193, 68, 14, 0.15);
+      transform: translateX(2px);
+      outline: none;
+    }
+
+    .chapter-card.inverse { border-left-color: var(--inverse); }
+    .chapter-card.inverse:hover,
+    .chapter-card.inverse:focus {
+      border-left-color: var(--inverse-glow);
+      box-shadow: 0 0 20px rgba(165, 107, 255, 0.2);
+    }
+
+    .chapter-card.gold { border-left-color: var(--gold); }
+    .chapter-card.gold:hover,
+    .chapter-card.gold:focus {
+      box-shadow: 0 0 20px rgba(201, 169, 97, 0.2);
+    }
+
+    .chapter-number {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--ember);
+      line-height: 1;
+      letter-spacing: 0.02em;
+      min-width: 2.5rem;
+    }
+
+    .chapter-card.inverse .chapter-number { color: var(--inverse-glow); }
+    .chapter-card.gold .chapter-number    { color: var(--gold); }
+
+    .chapter-meta h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--bone);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.35rem;
+    }
+
+    .chapter-meta p {
+      font-size: 0.88rem;
+      color: var(--ash);
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    .chapter-status {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.15rem 0.55rem;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 999px;
+    }
+
+    .chapter-status.playable {
+      background: rgba(201, 169, 97, 0.15);
+      border: 1px solid rgba(201, 169, 97, 0.5);
+      color: var(--gold);
+    }
+
+    @media (max-width: 600px) {
+      .mute-toggle { bottom: 0.6rem; right: 0.6rem; padding: 0.4rem 0.75rem; font-size: 0.7rem; }
+      .chapter-card { grid-template-columns: 1fr; }
+      .chapter-number { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <header class="site-header">
+    <svg class="clan-crest" viewBox="0 0 100 100" aria-hidden="true" role="img">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#c1440e" stroke-width="2"/>
+      <path d="M50 12 L58 38 L86 38 L63 54 L72 82 L50 65 L28 82 L37 54 L14 38 L42 38 Z"
+            fill="none" stroke="#c9a961" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="#6b2fb5" opacity="0.8"/>
+    </svg>
+    <h1>Lore of Hinomoto</h1>
+    <p class="tagline">The Truth of the Radiant Mother &amp; the Hollow Princess</p>
+  </header>
+
+  <nav class="site-nav" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lore.html" class="active">Lore</a></li>
+      <li><a href="create.html">Create</a></li>
+
+      <li class="dropdown">
+        <button class="dropdown-toggle" type="button" aria-haspopup="true" aria-expanded="false">
+          Story
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="prologue.html" role="menuitem">Prologue — The Night the Estate Burned</a></li>
+          <li><a href="interlude.html" role="menuitem">Interlude — Dawn After the Fire</a></li>
+          <li class="menu-divider" role="separator"></li>
+          <li class="menu-header">The Road to Owari</li>
+          <li><a href="chapter1.html" role="menuitem">Chapter I — The Road East</a></li>
+          <li><a href="chapter2.html" role="menuitem">Chapter II — The Shrine of Ash</a></li>
+          <li><a href="chapter3.html" role="menuitem">Chapter III — The Village of Salt</a></li>
+          <li><a href="chapter4.html" role="menuitem">Chapter IV — The Three Years</a></li>
+          <li><a href="chapter5.html" role="menuitem">Chapter V — The Shrine of Light</a></li>
+        </ul>
+      </li>
+
+      <li><a href="achievements.html">Achievements</a></li>
+      <li><a href="feedback.html">Feedback</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- ---------- PROLOGUE VIDEO ---------- -->
+    <section id="vision" aria-labelledby="vision-heading">
+      <h2 id="vision-heading">The Vision That Started It All</h2>
+      <div class="banner">
+        <video
+          id="lore-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          aria-label="The night the Radiant Mother revealed her true hunger"
+        >
+          <source src="radiantmother.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <button class="btn mute-toggle" type="button" id="mute-toggle" aria-pressed="true">
+          Unmute
+        </button>
+      </div>
+      <p class="muted" style="margin-top: 0.75rem;">
+        Footage recovered from the burning estate &mdash; the night the veil was torn.
+      </p>
+    </section>
+
+    <!-- ---------- THE RADIANT MOTHER ---------- -->
+    <section id="radiant-mother" class="section-clear" aria-labelledby="radiant-heading">
+      <h2 id="radiant-heading">The Radiant Mother</h2>
+
+      <img
+        src="radiant-blade.png"
+        alt="The Blade of the Radiant Mother — a ceremonial katana floating upright, wreathed in golden halo rings, with an unblinking eye set into its pommel and gold ash drifting from the steel."
+        class="float-right"
+      />
+
+      <p>
+        Throughout Hinomoto, the <span class="gold-text">Radiant Mother</span> is worshipped as the
+        source of all divine light. Shrines burn incense at her altars. Champions kneel before
+        her priests to receive her blessing before battle. Mothers whisper her name over sleeping
+        children. Her symbol &mdash; a golden halo encircling a single eye &mdash; is stitched into
+        banners from <span class="ember-text">Owari</span> to <span class="ember-text">Ise</span>.
+      </p>
+      <p>
+        But the truth is far older than the faith. The Radiant Mother is not a goddess.
+        She is a <span class="inverse-text">celestial parasite</span> &mdash; a vast, hungering
+        consciousness that drifted into Hinomoto's sky in an age before memory. She does not
+        grant blessings out of love. She grants them to <em>fatten</em>.
+      </p>
+      <p class="muted" style="font-style: italic; margin-bottom: 1.25rem;">
+        The Blade of the Radiant Mother. Given only to her champions. Taken back only when they are ripe.
+      </p>
+
+      <div class="scripture">
+        She does not save the worthy. She seasons them.
+        <cite>&mdash; The Ash-Stained Scroll, verse unnumbered</cite>
+      </div>
+
+      <h3>How the Harvest Works</h3>
+      <p>
+        When a champion accepts the Radiant Mother's blessing, a fragment of her light is
+        planted in their soul. Every enemy they slay, every essence they claim, every level
+        they gain &mdash; all of it is <em>tithed upward</em>. The champion believes they are
+        growing stronger. In truth, they are being marinated.
+      </p>
+      <p>
+        When the soul reaches its peak &mdash; ripe, glowing, saturated with stolen power &mdash;
+        the Radiant Mother comes to collect. The champion does not ascend. They are <em>consumed</em>.
+        Their name is erased from every record. Their family is told they were "called home to
+        the light."
+      </p>
+
+      <h3>Why No One Knows</h3>
+      <ul>
+        <li>Her priests are the only ones permitted to witness the harvest &mdash; and they are fed first.</li>
+        <li>Survivors who speak are branded heretics and burned at her shrines.</li>
+        <li>The harvest leaves no corpse &mdash; only a faint ring of gold ash where the champion stood.</li>
+        <li>Those who refuse her blessing are declared <span class="ember-text">faithless</span> and hunted by her chosen.</li>
+      </ul>
+    </section>
+
+    <!-- ---------- THE HOLLOW PRINCESS ---------- -->
+    <section id="utsuhime" class="section-clear" aria-labelledby="utsuhime-heading">
+      <h2 id="utsuhime-heading">The Hollow Princess</h2>
+
+      <img
+        src="utsuhime.png"
+        alt="Utsuhime, the Hollow Princess — a woman silhouetted in violet light against a swirling galaxy of stars and nebulae, her long hair drifting like a cosmic wind, her eyes closed, her form barely more than an outline of soft glowing purple."
+        class="float-left"
+      />
+
+      <p>
+        There was a sky before her. There was a goddess before her. No one remembers the name,
+        because the Radiant Mother did not merely replace the old faith &mdash; she
+        <em>erased</em> it. The oldest shrines in Hinomoto are built over foundations no
+        priest will speak of. The oldest prayers were written in a hand no one can read.
+        Something was here first.
+      </p>
+      <p>
+        Her name was <span class="ash-text">Utsuhime</span> &mdash; the Hollow Princess. She was
+        the daughter of the first sky, the goddess who shaped the four domains and taught the
+        earliest people to bury their dead. She was not a warrior. She was not a tyrant. She
+        was a <em>scavenger</em>, and she fed the way the world fed &mdash; slowly, patiently,
+        on the natural dying of her people. She took what the world gave her and never once
+        reached for more.
+      </p>
+      <p class="muted" style="font-style: italic; margin-bottom: 1.25rem;">
+        Utsuhime, the Hollow Princess. Daughter of the first sky. The goddess the world forgot.
+      </p>
+
+      <p>
+        She was weak because of it. She was content with a trickle. She was happy with the slow
+        rhythm of mortals living and dying on their own terms. And then the Radiant Mother
+        arrived, and she discovered what ambition looked like.
+      </p>
+
+      <div class="whisper">
+        i was not devoured because i was weak. i was devoured because i was patient. she was
+        patient too &mdash; but her patience had teeth.
+        <cite>&mdash; Utsuhime, in the dark, ten thousand years later</cite>
+      </div>
+
+      <h3>How The Radiant Mother Took Her Throne</h3>
+      <p>
+        The Radiant Mother did not fight Utsuhime. She did not need to. She arrived, she
+        observed, and she realized that the older goddess had built a system that could be
+        <em>exploited</em>.
+      </p>
+      <p>
+        Utsuhime waited for wars. The Radiant Mother realized she could <em>cause</em> them.
+        Utsuhime waited for plagues. The Radiant Mother realized she could <em>spread</em> them.
+        Utsuhime relied on the natural dying of her worshippers. The Radiant Mother realized she
+        could <em>manufacture</em> the dying.
+      </p>
+      <p>
+        Within a few centuries, her influence grew faster than the old goddess could keep up with.
+        By the time Utsuhime realized what was happening, her worshippers had already begun
+        praying to a new name. Her shrines had been rebuilt around a new symbol. Her story had
+        been forgotten, replaced by a lie that sounded gentler.
+      </p>
+      <p>
+        And then the Radiant Mother reached into Utsuhime's very essence &mdash; and
+        <em>devoured</em> her. Not wholly. Not cleanly. But enough that the older goddess
+        was reduced to a whisper, a fragment, a husk of what she had been. She has not spoken
+        to a mortal in ten thousand years.
+      </p>
+
+      <div class="scripture">
+        She does not wait for the dying. She makes the living die for her.
+        <cite>&mdash; The Ash-Stained Scroll, on the Radiant Mother</cite>
+      </div>
+
+      <h3>Where She Is Now</h3>
+      <p>
+        Utsuhime does not exist as a goddess anymore. She exists as a fracture &mdash; a
+        thousand-year-old crack in the celestial order that the Radiant Mother did not
+        bother to close. She lives in the ruins of the old shrines. She lives in the soil of
+        forgotten battlefields. She lives wherever the world remembers something that the
+        Radiant Mother has erased.
+      </p>
+      <p>
+        And now &mdash; for the first time in a thousand years &mdash; she has a voice again.
+      </p>
+      <p>
+        When the Radiant Mother cursed you with <span class="inverse-text">The Inverse</span>,
+        she opened a door she did not mean to open. She opened a crack in her own system &mdash;
+        a place where Utsuhime could reach through. Every soul the Radiant Mother has
+        cursed before you was consumed or scattered before the crack could be used. You are
+        the <em>first</em> one to survive. You are the <em>first</em> time the old goddess
+        could interfere.
+      </p>
+      <p>
+        The Inverse is not a curse. It is a <em>door</em>. And the Hollow Princess has been
+        walking through it ever since.
+      </p>
+
+      <div class="whisper">
+        i will not command you. i will not beg you. i am too tired for either. i will only
+        ask you to remember that there was a world before her. there will be a world after.
+        and you are standing in the doorway between them.
+        <cite>&mdash; Utsuhime, to the last commander of the fallen estate</cite>
+      </div>
+
+      <h3>What She Wants</h3>
+      <p>
+        Utsuhime does not want to save you. She wants to save <em>herself</em>. She is tired
+        of being a whisper. She is tired of watching the Radiant Mother grow fat on a world
+        she was never meant to hold. She wants her sky back. She wants her rhythm back. She
+        wants the world to die on its own terms again.
+      </p>
+      <p>
+        She is not good. She fed on Hinomoto for ten thousand years. She took every soul that
+        passed out of the world and into her dark. She is a predator &mdash; just a slow one.
+        But she is a predator who <em>waited</em>. And in a world where the other predator
+        has already eaten everything she loved, patience might be the only virtue left.
+      </p>
+    </section>
+
+    <!-- ---------- THE FIVE CHAPTERS ---------- -->
+    <section id="chapters" aria-labelledby="chapters-heading">
+      <h2 id="chapters-heading">The Road to Owari</h2>
+      <p class="muted">
+        The story of Chronicles of Hinomoto unfolds across five chapters &mdash; one long road
+        from the ashes of the estate to the shrine of the Radiant Mother at Owari. Each chapter
+        is a different leg of the hunt. Each one takes you further from the person you were.
+      </p>
+
+      <div class="chapter-list">
+
+        <a class="chapter-card" href="chapter1.html">
+          <span class="chapter-number">I</span>
+          <div class="chapter-meta">
+            <h4>The Road East</h4>
+            <p>
+              The first night alone. The first shrine to the false mother. The first champion
+              sent to bring you back &mdash; and the first soul the Inverse drinks down.
+            </p>
+            <span class="chapter-status playable">Playable</span>
+          </div>
+        </a>
+
+        <a class="chapter-card inverse" href="chapter2.html">
+          <span class="chapter-number">II</span>
+          <div class="chapter-meta">
+            <h4>The Shrine of Ash</h4>
+            <p>
+              An abandoned shrine to Utsuhime. A memory of the sky before the Radiant Mother.
+              A prayer cord that makes the Inverse hum a little softer.
+            </p>
+            <span class="chapter-status playable">Playable</span>
+          </div>
+        </a>
+
+        <a class="chapter-card inverse" href="chapter3.html">
+          <span class="chapter-number">III</span>
+          <div class="chapter-meta">
+            <h4>The Village of Salt</h4>
+            <p>
+              A coastal village caught between two faiths. An old priest who senses something
+              wrong. A second champion of the Radiant Mother &mdash; and a choice that will
+              follow you for the rest of the road.
+            </p>
+            <span class="chapter-status playable">Playable</span>
+          </div>
+        </a>
+
+        <a class="chapter-card inverse" href="chapter4.html">
+          <span class="chapter-number">IV</span>
+          <div class="chapter-meta">
+            <h4>The Three Years</h4>
+            <p>
+              The hunt becomes a way of life. You learn what the Inverse truly is. You learn
+              what Utsuhime truly wants. By the time the third winter passes, you are no longer
+              the last of your clan. You are something the goddess does not have a name for.
+            </p>
+            <span class="chapter-status playable">Playable</span>
+          </div>
+        </a>
+
+        <a class="chapter-card gold" href="chapter5.html">
+          <span class="chapter-number">V</span>
+          <div class="chapter-meta">
+            <h4>The Shrine of Light</h4>
+            <p>
+              Owari. The oldest shrine. The seat of her power. The confrontation you have been
+              walking toward since the night your estate burned. Three paths forward. Three
+              endings. One of them yours.
+            </p>
+            <span class="chapter-status playable">Playable</span>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="whisper" style="margin-top: 2rem;">
+        five chapters. one road. i will be with you for all of them.
+        <cite>&mdash; Utsuhime, before you begin</cite>
+      </div>
+    </section>
+
+    <!-- ---------- THE INVERSE ---------- -->
+    <section id="inverse" aria-labelledby="inverse-heading">
+      <h2 id="inverse-heading">The Inverse</h2>
+      <p>
+        Every soul has a weight. The Radiant Mother has harvested for millennia, and in all that
+        time, she has only ever rejected one kind of soul: <span class="inverse-text">the frail</span>.
+      </p>
+      <p>
+        A soul too weak to fatten, too thin to harvest, too dim to season. When such a soul is
+        offered to her &mdash; as yours was, on the night your estate burned &mdash; she does not
+        simply pass it by. She <em>recoils</em>. And in recoiling, she curses it.
+      </p>
+
+      <div class="scripture">
+        You are not worthy of my light. Then let the absence of it define you.
+        <cite>&mdash; The Radiant Mother, to the last commander of the fallen estate</cite>
+      </div>
+
+      <h3>What the Curse Does</h3>
+      <p>
+        The curse is called <span class="inverse-text">The Inverse</span>. It inverts the fundamental
+        math of the soul:
+      </p>
+      <ul>
+        <li><strong>Leveling:</strong> Instead of gaining positive stats, your attributes invert into negative values.</li>
+        <li><strong>Essence:</strong> You cannot tithe upward &mdash; so you <em>absorb downward</em>, pulling energy from every enemy you slay.</li>
+        <li><strong>Divine Metal:</strong> Blessed steel &mdash; the Radiant Mother's own weapon &mdash; rots in your presence.</li>
+        <li><strong>Hierarchy:</strong> The celestial order cannot perceive you. You are a hole in the ledger of heaven.</li>
+        <li><strong>Growth:</strong> Where others gain power, you gain <em>depth</em>. The weaker you become, the more you can hold.</li>
+      </ul>
+
+      <h3>What The Radiant Mother Does Not Know</h3>
+      <p>
+        She believes she created the Inverse. She believes it is her curse &mdash; a punishment
+        for a soul unworthy of her attention. She is wrong.
+      </p>
+      <p>
+        The Inverse is not her curse. It is <span class="ash-text">Utsuhime's gift</span>,
+        wearing the Radiant Mother's shape. It is a door the Hollow Princess opened the instant
+        the goddess looked away. Every soul the Radiant Mother curses is a chance for Utsuhime
+        to reach through. Every cursing is a door. And this time, finally, the door stayed open.
+      </p>
+      <p>
+        You are not the first person the Radiant Mother has cursed. You are the first
+        <em>successful</em> interference by the goddess she thought she had eaten.
+      </p>
+
+      <h3>Why It Terrifies Her</h3>
+      <p>
+        The Radiant Mother has no defense against a soul she cannot feed. Every champion she sends
+        against you is, in effect, a meal delivered to your door. Every blessing she pours into
+        her chosen is essence you will eventually claim. You are not her enemy &mdash; you are her
+        <span class="inverse-text">antithesis</span>. And she knows it.
+      </p>
+      <p>
+        Worse: she knows there is a voice inside your head that is not hers. She cannot hear it.
+        She cannot touch it. But she can feel it &mdash; a whisper she thought she had silenced
+        ten thousand years ago, walking the world in a body she rejected.
+      </p>
+    </section>
+
+    <!-- ---------- THE FOUR DOMAINS ---------- -->
+    <section id="domains" aria-labelledby="domains-heading">
+      <h2 id="domains-heading">The Four Domains</h2>
+      <p class="muted">
+        The realm of Hinomoto is fractured into four great domains. Each has its own relationship
+        with the Radiant Mother &mdash; some loyal, some silent, some already half-devoured.
+      </p>
+      <div class="domain-grid">
+        <div class="domain-card">
+          <h4>Owari</h4>
+          <p>The eastern coast. Her oldest shrine stands here, and her priests rule in all but name.</p>
+        </div>
+        <div class="domain-card">
+          <h4>Mikawa</h4>
+          <p>The mountain spine. A stubborn people who honor the old spirits and distrust the Radiant light.</p>
+        </div>
+        <div class="domain-card">
+          <h4>Mino</h4>
+          <p>The central plains. Wealthy, fractured, and ripe &mdash; her harvest fields in all but word.</p>
+        </div>
+        <div class="domain-card">
+          <h4>Ise</h4>
+          <p>The southern isles. Silence has fallen here. No pilgrims return. No priests speak of it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- THE HUNT BEGINS ---------- -->
+    <section id="hunt" aria-labelledby="hunt-heading">
+      <h2 id="hunt-heading">The Hunt Begins</h2>
+      <p>
+        You are the first soul in a thousand years that the Radiant Mother could not eat.
+        You are the first to walk Hinomoto with <span class="inverse-text">The Inverse</span>
+        humming in your chest. You are the first &mdash; and perhaps the only &mdash;
+        <span class="ember-text">weapon</span> capable of cutting the false goddess down.
+      </p>
+      <p>
+        But there is a voice in your head that is not yours. It has been there since the
+        moment of your curse. It speaks in fragments. It speaks in riddles. It speaks in a
+        language older than the Radiant Mother's name.
+      </p>
+      <p>
+        It is <span class="ash-text">Utsuhime</span>. She was the sky before the false mother
+        came. She was the world before the harvest. She has been waiting ten thousand years
+        for someone like you.
+      </p>
+      <p>
+        The realm is broken. The faith is a lie. The sky is hungry.
+      </p>
+      <p class="gold-text" style="font-family: var(--font-display); letter-spacing: 0.05em; margin-top: 1rem;">
+        Five chapters. One road. Hunt her. Reclaim the realm. Become the void she should have feared.
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> Chronicles of Hinomoto &mdash; Tactical Prologue</p>
+    <p>
+      <a href="index.html">Return Home</a> &middot;
+      <a href="feedback.html">Submit Feedback</a> &middot;
+      <a href="#top">Return to Top</a>
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const video = document.getElementById("lore-video");
+    const muteBtn = document.getElementById("mute-toggle");
+
+    muteBtn.addEventListener("click", () => {
+      video.muted = !video.muted;
+
+      if (video.muted) {
+        muteBtn.textContent = "Unmute";
+        muteBtn.setAttribute("aria-pressed", "true");
+      } else {
+        muteBtn.textContent = "Mute";
+        muteBtn.setAttribute("aria-pressed", "false");
+      }
+    });
+
+    video.addEventListener("pause", () => {
+      video.play().catch(() => {});
+    });
+
+    const dropdown = document.querySelector("nav.site-nav .dropdown");
+    const dropdownToggle = dropdown ? dropdown.querySelector(".dropdown-toggle") : null;
+
+    if (dropdown && dropdownToggle) {
+      dropdownToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle("open");
+        const expanded = dropdown.classList.contains("open");
+        dropdownToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          dropdown.classList.remove("open");
+          dropdownToggle.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
